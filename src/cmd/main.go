@@ -2,7 +2,9 @@ package main
 
 import (
 	"fmt"
+	"github.com/labstack/echo/v4"
 	"github.com/toshi0228/blockchain/src/entity"
+	"github.com/toshi0228/blockchain/src/infra/router"
 	"strings"
 )
 
@@ -12,6 +14,13 @@ type Sample struct {
 
 func main() {
 	fmt.Printf("%s main関数 %s \n", strings.Repeat("=", 25), strings.Repeat("=", 25))
+
+	// インスタンスを作成
+	e := echo.New()
+	router.InitRouter(e)
+
+	// サーバーをポート番号1323で起動
+	e.Logger.Fatal(e.Start(":4000"))
 
 	walletM := entity.NewWallet()
 	walletA := entity.NewWallet()
