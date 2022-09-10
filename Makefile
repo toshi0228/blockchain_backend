@@ -28,7 +28,7 @@ build_up:
 	docker-compose up --build
 
 in:
-	#docker container run -it go_app bash
+	#docker container run -it bc_app bash
 	docker-compose exec app bash
 
 in_db:

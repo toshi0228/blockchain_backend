@@ -1,0 +1,46 @@
+# Config file for [Air](https://github.com/cosmtrek/air) in TOML format
+
+# Working directory
+# . or absolute path, please note that the directories following must be under root.
+root = "/bc_app"
+tmp_dir = "./src/cmd/tmp"
+
+[build]
+# 単なる古いシェルコマンド。`make`を使用することもできます。
+cmd = "go build -o ./tmp/main"
+
+# バイナリファイルは`cmd`から生成されます。
+bin = "tmp/main"
+
+# Customize binary, can setup environment variables when run your app.
+# full_bin = "APP_ENV=dev APP_USER=air ./tmp/main"
+full_bin = "APP_ENV=dev APP_USER=air dlv exec ./tmp/main --accept-multiclient --log --headless --continue --listen :2345 --api-version 2"
+
+# Watch these filename extensions.
+include_ext = ["go"]
+
+# Ignore these filename extensions or directories.
+exclude_dir = ["tmp"]
+
+# Watch these directories if you specified.
+include_dir = []
+
+# Exclude files.
+exclude_file = []
+
+
+# ファイルが頻繁に変更されるたびにビルドをトリガーする必要はありません。
+delay = 1000 # ms
+
+# ビルドエラーが発生したら、古いバイナリの実行を停止します。
+stop_on_error = true
+
+# プロセスを強制終了する前に割り込みシグナルを送信します（Windowsはこの機能をサポートしていません）
+send_interrupt = false
+
+# 割り込み信号送信後の遅延
+kill_delay = 500  # ms
+
+[misc]
+# 終了時にtmpディレクトリを削除します
+clean_on_exit = true
