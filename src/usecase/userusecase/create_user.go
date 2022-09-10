@@ -1,26 +1,37 @@
 package userusecase
 
 import (
-	"github.com/toshi0228/blockchain/src/entity"
 	"github.com/toshi0228/blockchain/src/usecase/userusecase/input"
+	"github.com/toshi0228/blockchain/src/usecase/userusecase/output"
+	"github.com/toshi0228/blockchain/src/usecase/walletusecase"
 )
 
 type CreateUserusecase struct {
-	userRepository IUserRepository
+	userRepository   IUserRepository
+	walletRepository walletusecase.IWalletRepository
 }
 
-func NewCreateUser(userRepo IUserRepository) *CreateUserusecase {
+func NewCreateUser(userRepo IUserRepository, walletRepo walletusecase.IWalletRepository) *CreateUserusecase {
 	return &CreateUserusecase{
-		userRepository: userRepo,
+		userRepository:   userRepo,
+		walletRepository: walletRepo,
 	}
 }
 
-func (use *CreateUserusecase) Exec(in *input.CreateUserInput) (*entity.User, error) {
+func (use *CreateUserusecase) Exec(in *input.CreateUserInput) (*output.CreateUser, error) {
 
 	u, err := use.userRepository.CreateUser(in)
 	if err != nil {
 		return nil, err
 	}
 
-	return u, nil
+	w, err := use.walletRepository.Create(u.Id().Value())
+	if err != nil {
+		return nil, err
+	}
+
+	return &output.CreateUser{
+		Name:          u.Name(),
+		WalletAddress: w.BlockchainAddress(),
+	}, nil
 }

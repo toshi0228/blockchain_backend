@@ -8,6 +8,7 @@ import (
 var tableList = map[string]string{
 	"users":    dbtable.TableNameUser,
 	"profiles": dbtable.TableNameProfile,
+	"wallets":  dbtable.TableNameWallet,
 }
 
 func Reset() error {

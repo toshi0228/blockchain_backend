@@ -8,6 +8,7 @@ import (
 var createTableCMD = map[string]string{
 	"users":    dbtable.Users(),
 	"profiles": dbtable.Profiles(),
+	"wallets":  dbtable.Wallets(),
 }
 
 // CreateTables テーブルの作成 (テーブルがなければ作成される)

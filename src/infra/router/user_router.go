@@ -25,7 +25,9 @@ func NewUserRouter(e *echo.Echo) {
 		}
 
 		userRepoImpl := database.NewUserRepositoryImpl()
-		createUser, err := userusecase.NewCreateUser(userRepoImpl).Exec(in)
+		walletRepoImpl := database.NewWalletRepositoryImpl()
+
+		createUser, err := userusecase.NewCreateUser(userRepoImpl, walletRepoImpl).Exec(in)
 
 		if err != nil {
 			return c.JSON(http.StatusInternalServerError, err.Error())

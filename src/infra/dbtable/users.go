@@ -11,8 +11,6 @@ const TableNameUser = "users"
 var usersTableSql string
 
 func Users() string {
-
 	cmd := fmt.Sprintf(usersTableSql, TableNameUser)
-
 	return cmd
 }

@@ -7,17 +7,63 @@ import (
 	"crypto/sha256"
 	"fmt"
 	"github.com/btcsuite/btcutil/base58"
+	"github.com/toshi0228/blockchain/src/entity/vo"
 	"golang.org/x/crypto/ripemd160"
 )
 
 type Wallet struct {
-	privateKey        *ecdsa.PrivateKey
-	publicKey         *ecdsa.PublicKey
-	BlockChainAddress string
+	id                vo.ID             `json:"id"`
+	userID            vo.ID             `json:"userId"`
+	blockchainAddress string            `json:"blockchainAddress"`
+	privateKey        *ecdsa.PrivateKey `json:"privateKey"`
+	publicKey         *ecdsa.PublicKey  `json:"publicKey"`
+	createdAt         vo.CreatedAt      `json:"createdAt"`
+	updatedAt         vo.UpdatedAt      `json:"updatedAt"`
 }
 
-func NewWallet() *Wallet {
+func (w *Wallet) Id() vo.ID {
+	return w.id
+}
+
+func (w *Wallet) UserID() vo.ID {
+	return w.userID
+}
+
+func (w *Wallet) CreatedAt() vo.CreatedAt {
+	return w.createdAt
+}
+
+func (w *Wallet) UpdatedAt() vo.UpdatedAt {
+	return w.updatedAt
+}
+
+func (w *Wallet) BlockchainAddress() string {
+	return w.blockchainAddress
+}
+
+func (w *Wallet) PrivateKey() *ecdsa.PrivateKey {
+	return w.privateKey
+}
+
+func (w *Wallet) PrivateKeyStr() string {
+	return fmt.Sprintf("%x", w.privateKey.D.Bytes())
+}
+
+func (w *Wallet) PublicKey() *ecdsa.PublicKey {
+	return w.publicKey
+}
+
+func (w *Wallet) PublicKeyStr() string {
+	return fmt.Sprintf("%x%x", w.publicKey.X.Bytes(), w.publicKey.Y.Bytes())
+}
+
+func NewWallet(userID uint32) (*Wallet, error) {
 	w := &Wallet{}
+
+	w.id = vo.NewID()
+	w.userID = vo.ID(userID)
+	w.createdAt = vo.NewCreatedAt()
+	w.updatedAt = vo.NewUpdatedAt()
 
 	// 秘密鍵からECDSAで公開鍵を生成
 	privateKey, _ := ecdsa.GenerateKey(elliptic.P256(), rand.Reader)
@@ -58,27 +104,7 @@ func NewWallet() *Wallet {
 
 	//Base58のフォーマットでエンコーディングする
 	address := base58.Encode(dc8)
-	w.BlockChainAddress = address
+	w.blockchainAddress = address
 
-	return w
-}
-
-func (w *Wallet) BlockchainAddress() string {
-	return w.BlockChainAddress
-}
-
-func (w *Wallet) PrivateKey() *ecdsa.PrivateKey {
-	return w.privateKey
-}
-
-func (w *Wallet) PrivateKeyStr() string {
-	return fmt.Sprintf("%x", w.privateKey.D.Bytes())
-}
-
-func (w *Wallet) PublicKey() *ecdsa.PublicKey {
-	return w.publicKey
-}
-
-func (w *Wallet) PublicKeyStr() string {
-	return fmt.Sprintf("%x%x", w.publicKey.X.Bytes(), w.publicKey.Y.Bytes())
+	return w, nil
 }
