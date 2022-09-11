@@ -26,6 +26,7 @@ func main() {
 
 	// インスタンスを作成
 	e := echo.New()
+
 	router.InitRouter(e)
 
 	// サーバーをポート番号1323で起動

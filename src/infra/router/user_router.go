@@ -11,7 +11,6 @@ import (
 
 func NewUserRouter(e *echo.Echo) {
 	e.GET("/user", func(c echo.Context) error {
-
 		in := &input.CreateUserInput{}
 		return c.JSON(http.StatusOK, in)
 	})
@@ -26,7 +25,6 @@ func NewUserRouter(e *echo.Echo) {
 
 		userRepoImpl := database.NewUserRepositoryImpl()
 		walletRepoImpl := database.NewWalletRepositoryImpl()
-
 		createUser, err := userusecase.NewCreateUser(userRepoImpl, walletRepoImpl).Exec(in)
 
 		if err != nil {
