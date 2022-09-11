@@ -8,16 +8,17 @@ import (
 	"github.com/toshi0228/blockchain/src/infra/dbtable"
 	"github.com/toshi0228/blockchain/src/usecase/userusecase/input"
 	"log"
+	"time"
 )
 
 type UserRepositoryImpl struct{}
 
-//go:embed user_repository_create.sql
-var createUserSql string
-
 func NewUserRepositoryImpl() *UserRepositoryImpl {
 	return &UserRepositoryImpl{}
 }
+
+//go:embed user_repository_create.sql
+var createUserSql string
 
 func (repo UserRepositoryImpl) CreateUser(in *input.CreateUserInput) (*entity.User, error) {
 
@@ -43,4 +44,50 @@ func (repo UserRepositoryImpl) CreateUser(in *input.CreateUserInput) (*entity.Us
 	}
 
 	return u, nil
+}
+
+//go:embed user_repository_find_all.sql
+var findAllUserSql string
+
+func (repo *UserRepositoryImpl) FindAll() ([]*entity.User, error) {
+
+	cmd := fmt.Sprintf(findAllUserSql, dbtable.TableNameUser)
+
+	type user struct {
+		id        uint32
+		name      string
+		password  string
+		createdAt time.Time
+		updatedAt time.Time
+	}
+
+	rows, _ := db.Conn().Query(cmd)
+	defer rows.Close()
+
+	var uu []*user
+	for rows.Next() {
+
+		u := &user{}
+		err := rows.Scan(&u.id, &u.name, &u.password, &u.createdAt, &u.updatedAt)
+		if err != nil {
+			fmt.Println("エラーぶん")
+			fmt.Println(err)
+		}
+		uu = append(uu, u)
+	}
+
+	for _, u := range uu {
+		fmt.Println("---------------")
+		fmt.Println(u.id, u.name)
+	}
+
+	//for _, user := range users {
+	//	if user.ID() == id {
+	//		return user, nil
+	//	}
+	//}
+
+	//U, err := entity.NewUser()
+
+	return nil, nil
 }

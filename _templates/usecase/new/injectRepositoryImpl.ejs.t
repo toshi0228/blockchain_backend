@@ -5,6 +5,9 @@ inject: true
 append: dependencies
 ---
 
+//go:embed <%= h.changeCase.snake(entity) %>_repository_<%= h.changeCase.snake(method) %>.sql
+var <%= h.changeCase.camel(method) %><%= h.changeCase.pascal(entity) %>Sql string
+
 func (repo *<%= entity %>RepositoryImpl) <%=h.changeCase.pascal(method) %>(in *input.<%= h.changeCase.pascal(useCaseName) %>Input) ([]*entity.<%= entity %>, error) {
 
 	//_, err := entity.New<%= entity %>(in.Name)
@@ -12,9 +15,8 @@ func (repo *<%= entity %>RepositoryImpl) <%=h.changeCase.pascal(method) %>(in *i
 	//	return nil, fmt.Errorf(err.Error())
 	//}
 
-	//cmd := fmt.Sprintf(createUserSql, dbtable.TableNameUser)
+	//cmd := fmt.Sprintf(<%= h.changeCase.camel(method) %><%= h.changeCase.pascal(entity) %>Sql, dbtable.TableName<%= entity %>)
 	//_, err = db.Conn().Exec(cmd, u.Id())
 
 	return nil, nil
 }
-

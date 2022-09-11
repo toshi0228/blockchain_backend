@@ -11,8 +11,15 @@ import (
 
 func NewUserRouter(e *echo.Echo) {
 	e.GET("/user", func(c echo.Context) error {
-		in := &input.CreateUserInput{}
-		return c.JSON(http.StatusOK, in)
+		//in := &input.CreateUserInput{}
+
+		userRepoImpl := database.NewUserRepositoryImpl()
+		userList, err := userusecase.NewGetUserList(userRepoImpl).Exec()
+		if err != nil {
+			return c.JSON(http.StatusInternalServerError, err.Error())
+		}
+
+		return c.JSON(http.StatusOK, userList)
 	})
 
 	e.POST("/user", func(c echo.Context) error {

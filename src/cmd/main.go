@@ -19,10 +19,10 @@ func main() {
 	db.Conn()
 
 	// 開発環境の際は変更するたびにDBを削除する
-	db.Reset()
+	//db.Reset()
 
 	// テーブルの作成 (テーブルがなければ作成される)
-	db.CreateTables()
+	//db.CreateTables()
 
 	// インスタンスを作成
 	e := echo.New()

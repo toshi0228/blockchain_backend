@@ -6,5 +6,7 @@ import (
 )
 
 type IUserRepository interface {
+	FindAll() ([]*entity.User, error)
+
 	CreateUser(in *input.CreateUserInput) (*entity.User, error)
 }
