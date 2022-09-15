@@ -1,6 +1,9 @@
 package entity
 
-import "github.com/toshi0228/blockchain/src/entity/vo"
+import (
+	"github.com/toshi0228/blockchain/src/entity/vo"
+	"time"
+)
 
 type User struct {
 	id        vo.ID        `json:"id"`
@@ -30,7 +33,18 @@ func (u User) UpdatedAt() vo.UpdatedAt {
 	return u.updatedAt
 }
 
-func NewUser(name string, password string) (*User, error) {
+func NewUser(id uint32, name string, password string, createdAt time.Time, updatedAt time.Time) (*User, error) {
+	return &User{
+		id:        vo.ID(id),
+		name:      name,
+		password:  password,
+		createdAt: vo.CreatedAt(createdAt),
+		updatedAt: vo.UpdatedAt(updatedAt),
+	}, nil
+}
+
+// GenWhenCreateUser ユーザー作成の際のメソッド
+func GenWhenCreateUser(name string, password string) (*User, error) {
 	return &User{
 		id:        vo.NewID(),
 		name:      name,

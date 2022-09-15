@@ -12,8 +12,8 @@ func NewWalletRouter(e *echo.Echo) {
 		//u.Name = "a"
 		//u.Email = "b"
 		//
-		//return c.JSON(http.StatusOK, u)
-		return nil
+		return c.JSON(http.StatusOK, "a")
+		//return "nil"
 	})
 
 	e.POST("/wallet", func(c echo.Context) error {

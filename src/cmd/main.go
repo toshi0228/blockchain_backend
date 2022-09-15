@@ -22,7 +22,7 @@ func main() {
 	//db.Reset()
 
 	// テーブルの作成 (テーブルがなければ作成される)
-	//db.CreateTables()
+	db.CreateTables()
 
 	// インスタンスを作成
 	e := echo.New()

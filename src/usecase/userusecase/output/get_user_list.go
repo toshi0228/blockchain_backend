@@ -3,12 +3,12 @@ package output
 import "time"
 
 type UserList struct {
-	Users []*User `json:"users"`
+	Users []*UserItem `json:"users"`
 }
 
-type User struct {
-	ID        uint32 `json:"id"`
-	Name      string
+type UserItem struct {
+	ID        uint32    `json:"id"`
+	Name      string    `json:"name"`
 	CreatedAt time.Time `json:"createdAt"`
 	UpdatedAt time.Time `json:"updatedAt"`
 }

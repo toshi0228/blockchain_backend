@@ -15,10 +15,20 @@ func NewGetUserList(UserRepo IUserRepository) *GetUserListusecase {
 }
 
 func (use *GetUserListusecase) Exec() (*output.UserList, error) {
-	_, err := use.UserRepository.FindAll()
+	users, err := use.UserRepository.FindAll()
 	if err != nil {
 		return nil, err
 	}
 
-	return &output.UserList{}, nil
+	userItems := make([]*output.UserItem, len(users))
+	for i, user := range users {
+		userItems[i] = &output.UserItem{
+			ID:        user.Id().Value(),
+			Name:      user.Name(),
+			CreatedAt: user.CreatedAt().Value(),
+			UpdatedAt: user.UpdatedAt().Value(),
+		}
+	}
+
+	return &output.UserList{Users: userItems}, nil
 }

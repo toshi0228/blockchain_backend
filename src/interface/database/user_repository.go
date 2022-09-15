@@ -22,7 +22,7 @@ var createUserSql string
 
 func (repo UserRepositoryImpl) CreateUser(in *input.CreateUserInput) (*entity.User, error) {
 
-	u, err := entity.NewUser(in.Name, in.Password)
+	u, err := entity.GenWhenCreateUser(in.Name, in.Password)
 	if err != nil {
 		return nil, fmt.Errorf(err.Error())
 	}
@@ -53,7 +53,7 @@ func (repo *UserRepositoryImpl) FindAll() ([]*entity.User, error) {
 
 	cmd := fmt.Sprintf(findAllUserSql, dbtable.TableNameUser)
 
-	type user struct {
+	type userRow struct {
 		id        uint32
 		name      string
 		password  string
@@ -64,30 +64,27 @@ func (repo *UserRepositoryImpl) FindAll() ([]*entity.User, error) {
 	rows, _ := db.Conn().Query(cmd)
 	defer rows.Close()
 
-	var uu []*user
+	if rows == nil {
+		return nil, nil
+	}
+
+	var users []*entity.User
 	for rows.Next() {
 
-		u := &user{}
-		err := rows.Scan(&u.id, &u.name, &u.password, &u.createdAt, &u.updatedAt)
+		ur := &userRow{}
+		err := rows.Scan(&ur.id, &ur.name, &ur.password, &ur.createdAt, &ur.updatedAt)
 		if err != nil {
 			fmt.Println("エラーぶん")
 			fmt.Println(err)
 		}
-		uu = append(uu, u)
+
+		u, err := entity.NewUser(ur.id, ur.name, ur.password, ur.createdAt, ur.updatedAt)
+		if err != nil {
+			return nil, fmt.Errorf(err.Error())
+		}
+		users = append(users, u)
+
 	}
 
-	for _, u := range uu {
-		fmt.Println("---------------")
-		fmt.Println(u.id, u.name)
-	}
-
-	//for _, user := range users {
-	//	if user.ID() == id {
-	//		return user, nil
-	//	}
-	//}
-
-	//U, err := entity.NewUser()
-
-	return nil, nil
+	return users, nil
 }
