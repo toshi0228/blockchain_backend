@@ -26,7 +26,7 @@ func (c *<%= h.changeCase.camel(entity) %>Controller) <%=　h.changeCase.pascal(
 	if err != nil {
 		return err
 	}
-	return nil
-	// return c.delivery.UserList(out)
+
+	return c.delivery.<%= h.changeCase.pascal(output) %>(out)
 
 }

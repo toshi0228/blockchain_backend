@@ -8,8 +8,8 @@ package output
 import "time"
 
 type <%= h.changeCase.pascal(output) %> struct {
-	ID  uint32 `json:"id"`
+	ID uint32 `json:"id"`
 
-    CreatedAt time.Time `json:"createdAt"`
-    UpdatedAt time.Time `json:"updatedAt"`
+	CreatedAt time.Time `json:"createdAt"`
+	UpdatedAt time.Time `json:"updatedAt"`
 }
