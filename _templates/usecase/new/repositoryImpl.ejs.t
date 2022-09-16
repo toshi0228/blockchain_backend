@@ -28,8 +28,7 @@ func (repo *<%= entity %>RepositoryImpl) <%= h.changeCase.pascal(method) %>(in *
 	//	return nil, fmt.Errorf(err.Error())
 	//}
 
-	//cmd := fmt.Sprintf(<%= h.changeCase.camel(method) %><%= h.changeCase.camel(entity) %>Sql, dbtable.TableNameUser)
-	//_, err = db.Conn().Exec(cmd, u.Id())
+	//_, err = db.Conn().Exec(<%= h.changeCase.camel(method) %><%= h.changeCase.pascal(entity) %>Sql, u.Id())
 
 	return nil, nil
 }
