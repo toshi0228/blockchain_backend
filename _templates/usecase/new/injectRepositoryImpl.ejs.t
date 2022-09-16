@@ -5,6 +5,7 @@ inject: true
 append: dependencies
 ---
 
+
 //go:embed <%= h.changeCase.snake(entity) %>_repository_<%= h.changeCase.snake(method) %>.sql
 var <%= h.changeCase.camel(method) %><%= h.changeCase.pascal(entity) %>Sql string
 

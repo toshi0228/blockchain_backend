@@ -5,4 +5,3 @@ inject: true
 after: interface {
 ---
     <%= h.changeCase.pascal(method) %>(in *input.<%= h.changeCase.pascal(useCaseName) %>Input) ([]*entity.<%= entity %>, error)
-
