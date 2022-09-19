@@ -17,6 +17,10 @@ func New<%= entity %>RepositoryImpl() *<%= entity %>RepositoryImpl {
 	return &<%= entity %>RepositoryImpl{}
 }
 
+//===========================================================
+// <%= h.changeCase.pascal(entity) %> <%=　h.changeCase.pascal(method) %>
+//===========================================================
+
 //go:embed <%= h.changeCase.snake(entity) %>_repository_<%= h.changeCase.snake(method) %>.sql
 var <%= h.changeCase.camel(method) %><%= h.changeCase.pascal(entity) %>Sql string
 

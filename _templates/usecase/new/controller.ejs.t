@@ -28,5 +28,4 @@ func (c *<%= h.changeCase.camel(entity) %>Controller) <%=　h.changeCase.pascal(
 	}
 
 	return c.delivery.<%= h.changeCase.pascal(output) %>(out)
-
 }

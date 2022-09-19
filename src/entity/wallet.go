@@ -9,6 +9,7 @@ import (
 	"github.com/btcsuite/btcutil/base58"
 	"github.com/toshi0228/blockchain/src/entity/vo"
 	"golang.org/x/crypto/ripemd160"
+	"time"
 )
 
 type Wallet struct {
@@ -107,4 +108,46 @@ func NewWallet(userID uint32) (*Wallet, error) {
 	w.blockchainAddress = address
 
 	return w, nil
+}
+
+//==================================================
+//リレーション用のWaller
+//==================================================
+
+type GetWallet struct {
+	id                vo.ID        `json:"id"`
+	userID            vo.ID        `json:"userId"`
+	blockchainAddress string       `json:"blockchainAddress"`
+	createdAt         vo.CreatedAt `json:"createdAt"`
+	updatedAt         vo.UpdatedAt `json:"updatedAt"`
+}
+
+func (g GetWallet) Id() vo.ID {
+	return g.id
+}
+
+func (g GetWallet) UserID() vo.ID {
+	return g.userID
+}
+
+func (g GetWallet) BlockchainAddress() string {
+	return g.blockchainAddress
+}
+
+func (g GetWallet) CreatedAt() vo.CreatedAt {
+	return g.createdAt
+}
+
+func (g GetWallet) UpdatedAt() vo.UpdatedAt {
+	return g.updatedAt
+}
+
+func NewGetWallet(id uint32, userID uint32, blockchainAddress string, createdAt time.Time, updatedAt time.Time) (*GetWallet, error) {
+	return &GetWallet{
+		id:                vo.ID(id),
+		userID:            vo.ID(userID),
+		blockchainAddress: blockchainAddress,
+		createdAt:         vo.CreatedAt(createdAt),
+		updatedAt:         vo.UpdatedAt(updatedAt),
+	}, nil
 }

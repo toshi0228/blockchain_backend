@@ -46,12 +46,22 @@ func (repo UserRepositoryImpl) CreateUser(in *input.CreateUserInput) (*entity.Us
 	return u, nil
 }
 
+//===========================================================
+// UserPager FindAll
+//===========================================================
+
 //go:embed user_repository_find_all.sql
 var findAllUserSql string
 
-func (repo *UserRepositoryImpl) FindAll() ([]*entity.User, error) {
+// FindAll ユーザーの一覧取得
+func (repo *UserRepositoryImpl) FindAll() ([]*entity.UserPager, error) {
 
-	cmd := fmt.Sprintf(findAllUserSql, dbtable.TableNameUser)
+	rows, _ := db.Conn().Query(findAllUserSql)
+	defer rows.Close()
+
+	if rows == nil {
+		return nil, nil
+	}
 
 	type userRow struct {
 		id        uint32
@@ -59,31 +69,54 @@ func (repo *UserRepositoryImpl) FindAll() ([]*entity.User, error) {
 		password  string
 		createdAt time.Time
 		updatedAt time.Time
+
+		// relationされたwallet情報
+		walletId          uint32
+		userID            uint32
+		blockchainAddress string
+		walletCreatedAt   time.Time
+		walletUpdatedAt   time.Time
 	}
 
-	rows, _ := db.Conn().Query(cmd)
-	defer rows.Close()
-
-	if rows == nil {
-		return nil, nil
-	}
-
-	var users []*entity.User
+	var users []*entity.UserPager
 	for rows.Next() {
 
 		ur := &userRow{}
-		err := rows.Scan(&ur.id, &ur.name, &ur.password, &ur.createdAt, &ur.updatedAt)
+
+		err := rows.Scan(
+			&ur.id,
+			&ur.name,
+			&ur.password,
+			&ur.createdAt,
+			&ur.updatedAt,
+			&ur.walletId,
+			&ur.userID,
+			&ur.blockchainAddress,
+			&ur.walletCreatedAt,
+			&ur.walletUpdatedAt,
+		)
+
 		if err != nil {
 			fmt.Println("エラーぶん")
 			fmt.Println(err)
 		}
 
-		u, err := entity.NewUser(ur.id, ur.name, ur.password, ur.createdAt, ur.updatedAt)
+		u, err := entity.NewUserPager(
+			ur.id,
+			ur.name,
+			ur.password,
+			ur.createdAt,
+			ur.updatedAt,
+			ur.walletId,
+			ur.userID,
+			ur.blockchainAddress,
+			ur.walletCreatedAt,
+			ur.walletUpdatedAt,
+		)
 		if err != nil {
 			return nil, fmt.Errorf(err.Error())
 		}
 		users = append(users, u)
-
 	}
 
 	return users, nil
