@@ -53,48 +53,42 @@ func (repo UserRepositoryImpl) CreateUser(in *input.CreateUserInput) (*entity.Us
 //go:embed user_repository_find_all.sql
 var findAllUserSql string
 
+type UserRow struct {
+	Id        uint32    `db:"id"`
+	Name      string    `db:"name"`
+	Password  string    `db:"password"`
+	CreatedAt time.Time `db:"created_at"`
+	UpdatedAt time.Time `db:"updated_at"`
+
+	// relationされたwallet情報
+	WalletId          uint32    `db:"wallet_id"`
+	UserID            uint32    `db:"user_id"`
+	BlockchainAddress string    `db:"blockchain_address"`
+	WalletCreatedAt   time.Time `db:"wallet_created_at"`
+	WalletUpdatedAt   time.Time `db:"wallet_updated_at"`
+}
+
 // FindAll ユーザーの一覧取得
 func (repo *UserRepositoryImpl) FindAll() ([]*entity.UserPager, error) {
 
-	rows, _ := db.Conn().Query(findAllUserSql)
-	defer rows.Close()
+	//customers := make([]userRow, 0)
+
+	rows, err := db.Conn().Queryx(findAllUserSql)
+	if err != nil {
+		return nil, err
+	}
+	//defer rows.C()
 
 	if rows == nil {
 		return nil, nil
 	}
 
-	type userRow struct {
-		id        uint32
-		name      string
-		password  string
-		createdAt time.Time
-		updatedAt time.Time
-
-		// relationされたwallet情報
-		walletId          uint32
-		userID            uint32
-		blockchainAddress string
-		walletCreatedAt   time.Time
-		walletUpdatedAt   time.Time
-	}
-
 	var users []*entity.UserPager
 	for rows.Next() {
 
-		ur := &userRow{}
+		ur := &UserRow{}
 
-		err := rows.Scan(
-			&ur.id,
-			&ur.name,
-			&ur.password,
-			&ur.createdAt,
-			&ur.updatedAt,
-			&ur.walletId,
-			&ur.userID,
-			&ur.blockchainAddress,
-			&ur.walletCreatedAt,
-			&ur.walletUpdatedAt,
-		)
+		err := rows.StructScan(ur)
 
 		if err != nil {
 			fmt.Println("エラーぶん")
@@ -102,22 +96,29 @@ func (repo *UserRepositoryImpl) FindAll() ([]*entity.UserPager, error) {
 		}
 
 		u, err := entity.NewUserPager(
-			ur.id,
-			ur.name,
-			ur.password,
-			ur.createdAt,
-			ur.updatedAt,
-			ur.walletId,
-			ur.userID,
-			ur.blockchainAddress,
-			ur.walletCreatedAt,
-			ur.walletUpdatedAt,
+			ur.Id,
+			ur.Name,
+			ur.Password,
+			ur.CreatedAt,
+			ur.UpdatedAt,
+			ur.WalletId,
+			ur.UserID,
+			ur.BlockchainAddress,
+			ur.WalletCreatedAt,
+			ur.WalletUpdatedAt,
 		)
 		if err != nil {
 			return nil, fmt.Errorf(err.Error())
 		}
+
+		log.Println("=============")
+		log.Println(u.Id())
+		log.Println(u.Wallet().BlockchainAddress())
+		log.Println(u.Wallet().Id())
+		log.Println(u.Wallet().UpdatedAt())
 		users = append(users, u)
 	}
 
 	return users, nil
+	//return users, nil
 }

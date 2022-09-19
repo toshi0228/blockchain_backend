@@ -1,21 +1,21 @@
 package db
 
 import (
-	"database/sql"
 	"fmt"
 	_ "github.com/go-sql-driver/mysql"
+	"github.com/jmoiron/sqlx"
 	"log"
 	"os"
 	"sync"
 )
 
-var sqlDriver *sql.DB
+var sqlDriver *sqlx.DB
 var connErr error
 
 var once sync.Once
 
 // Conn DBに接続　※外部から呼ばれる関数
-func Conn() *sql.DB {
+func Conn() *sqlx.DB {
 	once.Do(connImpl)
 	return sqlDriver
 }
@@ -26,7 +26,7 @@ func connImpl() {
 	fmt.Println("一度しか呼ばれないDB接続")
 	//環境ごとにDBの接続先が切り替る
 	dbConf := toggleDBConf()
-	sqlDriver, connErr = sql.Open("mysql", dbConf)
+	sqlDriver, connErr = sqlx.Open("mysql", dbConf)
 
 	if connErr != nil {
 		fmt.Println(connErr)
