@@ -11,11 +11,13 @@ import (
 )
 
 type <%= h.changeCase.camel(entity) %>Controller struct {
+    delivery presenter.I<%= h.changeCase.pascal(entity) %>Presenter
 	<%= h.changeCase.camel(entity) %>Repo <%= h.changeCase.lower(entity) %>usecase.I<%= h.changeCase.pascal(entity) %>Repository
 }
 
-func New<%= h.changeCase.pascal(entity) %>Controller(<%= h.changeCase.camel(entity) %>Repo <%= h.changeCase.lower(entity) %>usecase.I<%= h.changeCase.pascal(entity) %>Repository) *<%= h.changeCase.camel(entity) %>Controller {
+func New<%= h.changeCase.pascal(entity) %>Controller(p presenter.I<%= h.changeCase.pascal(entity) %>Presenter, <%= h.changeCase.camel(entity) %>Repo <%= h.changeCase.lower(entity) %>usecase.I<%= h.changeCase.pascal(entity) %>Repository) *<%= h.changeCase.camel(entity) %>Controller {
 	return &<%= h.changeCase.camel(entity) %>Controller{
+	    delivery: p,
 		<%= h.changeCase.camel(entity) %>Repo: <%= h.changeCase.camel(entity) %>Repo,
 	}
 }
