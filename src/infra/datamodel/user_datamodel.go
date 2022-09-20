@@ -8,6 +8,14 @@ type User struct {
 	Password  string    `db:"password"`
 	CreatedAt time.Time `db:"created_at"`
 	UpdatedAt time.Time `db:"updated_at"`
+}
+
+type UserPager struct {
+	Id        uint32    `db:"id"`
+	Name      string    `db:"name"`
+	Password  string    `db:"password"`
+	CreatedAt time.Time `db:"created_at"`
+	UpdatedAt time.Time `db:"updated_at"`
 
 	// relationされたwallet情報
 	WalletId          uint32    `db:"wallet_id"`

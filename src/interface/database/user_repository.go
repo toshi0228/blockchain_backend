@@ -69,7 +69,7 @@ func (repo *UserRepositoryImpl) FindAll() ([]*entity.UserPager, error) {
 
 	for rows.Next() {
 
-		u := &datamodel.User{}
+		u := &datamodel.UserPager{}
 		err := rows.StructScan(u)
 
 		if err != nil {
@@ -97,4 +97,52 @@ func (repo *UserRepositoryImpl) FindAll() ([]*entity.UserPager, error) {
 	}
 
 	return users, nil
+}
+
+//===========================================================
+// User Login
+//===========================================================
+
+//go:embed user_repository_login.sql
+var loginUserSql string
+
+func (repo *UserRepositoryImpl) Login(in *input.LoginUserInput) (*entity.User, error) {
+
+	//cmd := fmt.Sprintf(loginUserSql, in.Name, in.Password)
+
+	rows, err := db.Conn().Queryx(loginUserSql, in.Name, in.Password)
+	if err != nil {
+		log.Fatalln(err)
+		return nil, err
+	}
+
+	var users []*entity.User
+
+	for rows.Next() {
+		u := &datamodel.User{}
+		err := rows.StructScan(u)
+
+		if err != nil {
+			fmt.Println("エラー文")
+			fmt.Println(err)
+		}
+
+		userEntity, err := entity.NewUser(
+			u.Id,
+			u.Name,
+			u.Password,
+			u.CreatedAt,
+			u.UpdatedAt,
+		)
+		if err != nil {
+			return nil, fmt.Errorf(err.Error())
+		}
+		users = append(users, userEntity)
+	}
+
+	if len(users) > 0 {
+		return users[0], nil
+	}
+
+	return nil, nil
 }
