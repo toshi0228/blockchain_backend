@@ -106,7 +106,7 @@ func (repo *UserRepositoryImpl) FindAll() ([]*entity.UserPager, error) {
 //go:embed user_repository_login.sql
 var loginUserSql string
 
-func (repo *UserRepositoryImpl) Login(in *input.LoginUserInput) (*entity.User, error) {
+func (repo *UserRepositoryImpl) Login(in *input.LoginUserInput) (*entity.UserPager, error) {
 
 	//cmd := fmt.Sprintf(loginUserSql, in.Name, in.Password)
 
@@ -116,10 +116,10 @@ func (repo *UserRepositoryImpl) Login(in *input.LoginUserInput) (*entity.User, e
 		return nil, err
 	}
 
-	var users []*entity.User
+	var users []*entity.UserPager
 
 	for rows.Next() {
-		u := &datamodel.User{}
+		u := &datamodel.UserPager{}
 		err := rows.StructScan(u)
 
 		if err != nil {
@@ -127,12 +127,17 @@ func (repo *UserRepositoryImpl) Login(in *input.LoginUserInput) (*entity.User, e
 			fmt.Println(err)
 		}
 
-		userEntity, err := entity.NewUser(
+		userEntity, err := entity.NewUserPager(
 			u.Id,
 			u.Name,
 			u.Password,
 			u.CreatedAt,
 			u.UpdatedAt,
+			u.WalletId,
+			u.UserID,
+			u.BlockchainAddress,
+			u.WalletCreatedAt,
+			u.WalletUpdatedAt,
 		)
 		if err != nil {
 			return nil, fmt.Errorf(err.Error())

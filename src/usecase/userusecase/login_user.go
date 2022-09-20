@@ -16,13 +16,22 @@ func NewLoginUser(UserRepo IUserRepository) *LoginUserusecase {
 }
 
 func (use *LoginUserusecase) Exec(in *input.LoginUserInput) (*output.LoginUser, error) {
-	u, err := use.UserRepository.Login(in)
+	user, err := use.UserRepository.Login(in)
 	if err != nil {
 		return nil, err
 	}
 
 	return &output.LoginUser{
-		Name:   u.Name(),
-		Status: "ok",
+		ID:        user.Id().Value(),
+		Name:      user.Name(),
+		CreatedAt: user.CreatedAt().Value(),
+		UpdatedAt: user.UpdatedAt().Value(),
+		Wallet: &output.LoginUserWallet{
+			ID:                user.Wallet().Id().Value(),
+			UserID:            user.Wallet().UserID().Value(),
+			BlockchainAddress: user.Wallet().BlockchainAddress(),
+			CreatedAt:         user.Wallet().CreatedAt().Value(),
+			UpdatedAt:         user.UpdatedAt().Value(),
+		},
 	}, nil
 }
