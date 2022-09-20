@@ -1,5 +1,5 @@
 ---
-to: src/usecase/<%= entity %>usecase/I_<%= h.changeCase.snake(entity) %>_repository.go
+to: src/usecase/<%=　h.changeCase.lower(entity) %>usecase/I_<%= h.changeCase.snake(entity) %>_repository.go
 unless_exists: true
 ---
 package <%=　h.changeCase.lower(entity) %>usecase
