@@ -115,6 +115,7 @@ func (repo *UserRepositoryImpl) Login(in *input.LoginUserInput) (*entity.UserPag
 		log.Fatalln(err)
 		return nil, err
 	}
+	defer rows.Close()
 
 	var users []*entity.UserPager
 
@@ -125,6 +126,7 @@ func (repo *UserRepositoryImpl) Login(in *input.LoginUserInput) (*entity.UserPag
 		if err != nil {
 			fmt.Println("エラー文")
 			fmt.Println(err)
+			return nil, err
 		}
 
 		userEntity, err := entity.NewUserPager(
@@ -145,9 +147,9 @@ func (repo *UserRepositoryImpl) Login(in *input.LoginUserInput) (*entity.UserPag
 		users = append(users, userEntity)
 	}
 
-	if len(users) > 0 {
-		return users[0], nil
+	if len(users) == 0 {
+		return nil, fmt.Errorf("ログインに失敗しました。")
 	}
 
-	return nil, nil
+	return users[0], nil
 }

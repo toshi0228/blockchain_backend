@@ -1,6 +1,7 @@
 package userusecase
 
 import (
+	"github.com/toshi0228/blockchain/src/entity/vo"
 	"github.com/toshi0228/blockchain/src/usecase/userusecase/input"
 	"github.com/toshi0228/blockchain/src/usecase/userusecase/output"
 )
@@ -21,11 +22,17 @@ func (use *LoginUserusecase) Exec(in *input.LoginUserInput) (*output.LoginUser, 
 		return nil, err
 	}
 
+	key := vo.NewCryptKey()
+
 	return &output.LoginUser{
 		ID:        user.Id().Value(),
 		Name:      user.Name(),
 		CreatedAt: user.CreatedAt().Value(),
 		UpdatedAt: user.UpdatedAt().Value(),
+		CryptKey: &output.CryptKey{
+			PrivateKey: key.PrivateKeyValue(),
+			PublicKey:  key.PublicKeyValue(),
+		},
 		Wallet: &output.LoginUserWallet{
 			ID:                user.Wallet().Id().Value(),
 			UserID:            user.Wallet().UserID().Value(),

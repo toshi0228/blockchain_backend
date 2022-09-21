@@ -1,6 +1,8 @@
 package output
 
-import "time"
+import (
+	"time"
+)
 
 type LoginUser struct {
 	ID        uint32           `json:"id"`
@@ -8,6 +10,7 @@ type LoginUser struct {
 	CreatedAt time.Time        `json:"createdAt"`
 	UpdatedAt time.Time        `json:"updatedAt"`
 	Wallet    *LoginUserWallet `json:"wallet"`
+	CryptKey  *CryptKey        `json:"cryptKey"`
 }
 
 type LoginUserWallet struct {
@@ -16,4 +19,9 @@ type LoginUserWallet struct {
 	BlockchainAddress string    `json:"blockchainAddress"`
 	CreatedAt         time.Time `json:"createdAt"`
 	UpdatedAt         time.Time `json:"updatedAt"`
+}
+
+type CryptKey struct {
+	PrivateKey string
+	PublicKey  string
 }
