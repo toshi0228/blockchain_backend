@@ -13,7 +13,7 @@ import (
 
 func New<%= h.changeCase.pascal(entity) %>Router(e *echo.Echo) {
 
-	//e.POST("/<%=　h.changeCase.lower(entity) %>", func(c echo.Context) error {
+	//e.POST("/<%=　h.changeCase.lower(entity) %>/<%=　h.changeCase.pascal(useCaseName) %>", func(c echo.Context) error {
 	//
 	//	in := &input.<%= h.changeCase.pascal(useCaseName) %>Input{}
 	//	err := c.Bind(in)
