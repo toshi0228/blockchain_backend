@@ -10,17 +10,17 @@ import (
 )
 
 type <%=　h.changeCase.pascal(useCaseName) %>usecase struct {
-	<%= entity %>Repository I<%= h.changeCase.pascal(entity) %>Repository
+	<%= h.changeCase.camel(entity) %>Repository I<%= h.changeCase.pascal(entity) %>Repository
 }
 
-func New<%=　h.changeCase.pascal(useCaseName) %>(<%= entity %>Repo I<%= h.changeCase.pascal(entity) %>Repository) *<%=　h.changeCase.pascal(useCaseName) %>usecase {
+func New<%=　h.changeCase.pascal(useCaseName) %>(<%= h.changeCase.camel(entity) %>Repo I<%= h.changeCase.pascal(entity) %>Repository) *<%=　h.changeCase.pascal(useCaseName) %>usecase {
 	return &<%=　h.changeCase.pascal(useCaseName) %>usecase{
-		<%= entity %>Repository: <%= entity %>Repo,
+		<%= h.changeCase.camel(entity) %>Repository: <%= h.changeCase.camel(entity) %>Repo,
 	}
 }
 
 func (use *<%=　h.changeCase.pascal(useCaseName) %>usecase) Exec(in *input.<%= h.changeCase.pascal(useCaseName) %>Input) (*output.<%= h.changeCase.pascal(output) %>, error) {
-	_, err := use.<%= entity %>Repository.<%=　h.changeCase.pascal(method) %>(in)
+	_, err := use.<%= h.changeCase.camel(entity) %>Repository.<%=　h.changeCase.pascal(method) %>(in)
 	if err != nil {
 		return nil, err
 	}
