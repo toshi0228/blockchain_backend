@@ -5,15 +5,19 @@ import (
 )
 
 type UserList struct {
-	Users []*UserItem `json:"users"`
+	Users []*User `json:"users"`
+}
+
+type User struct {
+	UserItem   *UserItem   `json:"user"`
+	WalletItem *WalletItem `json:"wallet"`
 }
 
 type UserItem struct {
-	ID        uint32      `json:"id"`
-	Name      string      `json:"name"`
-	CreatedAt time.Time   `json:"createdAt"`
-	UpdatedAt time.Time   `json:"updatedAt"`
-	Wallet    *WalletItem `json:"wallet"`
+	ID        uint32    `json:"id"`
+	Name      string    `json:"name"`
+	CreatedAt time.Time `json:"createdAt"`
+	UpdatedAt time.Time `json:"updatedAt"`
 }
 
 type WalletItem struct {

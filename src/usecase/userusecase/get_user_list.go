@@ -20,16 +20,20 @@ func (use *GetUserListusecase) Exec() (*output.UserList, error) {
 		return nil, err
 	}
 
-	userItems := make([]*output.UserItem, len(users))
+	outputUsers := make([]*output.User, len(users))
+
 	for i, user := range users {
 
-		userItems[i] = &output.UserItem{
-			ID:        user.Id().Value(),
-			Name:      user.Name(),
-			CreatedAt: user.CreatedAt().Value(),
-			UpdatedAt: user.UpdatedAt().Value(),
+		outputUsers[i] = &output.User{
+		
+			UserItem: &output.UserItem{
+				ID:        user.Id().Value(),
+				Name:      user.Name(),
+				CreatedAt: user.CreatedAt().Value(),
+				UpdatedAt: user.UpdatedAt().Value(),
+			},
 
-			Wallet: &output.WalletItem{
+			WalletItem: &output.WalletItem{
 				ID:        user.Wallet().Id().Value(),
 				UserID:    user.Wallet().UserID().Value(),
 				Address:   user.Wallet().BlockchainAddress(),
@@ -39,5 +43,5 @@ func (use *GetUserListusecase) Exec() (*output.UserList, error) {
 		}
 	}
 
-	return &output.UserList{Users: userItems}, nil
+	return &output.UserList{Users: outputUsers}, nil
 }
