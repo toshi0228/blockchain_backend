@@ -5,15 +5,19 @@ import (
 )
 
 type LoginUser struct {
-	ID        uint32           `json:"id"`
-	Name      string           `json:"name"`
-	CreatedAt time.Time        `json:"createdAt"`
-	UpdatedAt time.Time        `json:"updatedAt"`
-	Wallet    *LoginUserWallet `json:"wallet"`
-	CryptKey  *CryptKey        `json:"cryptKey"`
+	User     *User       `json:"user"`
+	Wallet   *UserWallet `json:"wallet"`
+	CryptKey *CryptKey   `json:"cryptKey"`
 }
 
-type LoginUserWallet struct {
+type User struct {
+	ID        uint32    `json:"id"`
+	Name      string    `json:"name"`
+	CreatedAt time.Time `json:"createdAt"`
+	UpdatedAt time.Time `json:"updatedAt"`
+}
+
+type UserWallet struct {
 	ID                uint32    `json:"iD"`
 	UserID            uint32    `json:"userID"`
 	BlockchainAddress string    `json:"blockchainAddress"`
@@ -22,6 +26,6 @@ type LoginUserWallet struct {
 }
 
 type CryptKey struct {
-	PrivateKey string
-	PublicKey  string
+	PrivateKey string `json:"privateKey"`
+	PublicKey  string `json:"publicKey"`
 }

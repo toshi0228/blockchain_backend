@@ -25,20 +25,24 @@ func (use *LoginUserusecase) Exec(in *input.LoginUserInput) (*output.LoginUser, 
 	key := vo.NewCryptKey()
 
 	return &output.LoginUser{
-		ID:        user.Id().Value(),
-		Name:      user.Name(),
-		CreatedAt: user.CreatedAt().Value(),
-		UpdatedAt: user.UpdatedAt().Value(),
-		CryptKey: &output.CryptKey{
-			PrivateKey: key.PrivateKeyValue(),
-			PublicKey:  key.PublicKeyValue(),
+		User: &output.User{
+			ID:        user.Id().Value(),
+			Name:      user.Name(),
+			CreatedAt: user.CreatedAt().Value(),
+			UpdatedAt: user.UpdatedAt().Value(),
 		},
-		Wallet: &output.LoginUserWallet{
+
+		Wallet: &output.UserWallet{
 			ID:                user.Wallet().Id().Value(),
 			UserID:            user.Wallet().UserID().Value(),
 			BlockchainAddress: user.Wallet().BlockchainAddress(),
 			CreatedAt:         user.Wallet().CreatedAt().Value(),
 			UpdatedAt:         user.UpdatedAt().Value(),
+		},
+
+		CryptKey: &output.CryptKey{
+			PrivateKey: key.PrivateKeyValue(),
+			PublicKey:  key.PublicKeyValue(),
 		},
 	}, nil
 }
