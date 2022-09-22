@@ -6,9 +6,10 @@ import (
 )
 
 var tableList = map[string]string{
-	"users":    dbtable.TableNameUser,
-	"profiles": dbtable.TableNameProfile,
-	"wallets":  dbtable.TableNameWallet,
+	"users":        dbtable.TableNameUser,
+	"profiles":     dbtable.TableNameProfile,
+	"wallets":      dbtable.TableNameWallet,
+	"transactions": dbtable.TableNameTransaction,
 }
 
 func Reset() error {
