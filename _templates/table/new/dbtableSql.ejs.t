@@ -1,22 +1,13 @@
 ---
-to: src/infra/dbtable/<%= h.changeCase.camel(entity) %>s.go
+to: src/infra/dbtable/<%= h.changeCase.camel(table) %>s.sql
 unless_exists: true
 ---
 
-package dbtable
-
-import (
-	_ "embed"
-	"fmt"
+CREATE TABLE IF NOT EXISTS %s
+(
+    id CHAR(40) NOT NULL,
+    name VARCHAR(255),
+    created_at DATETIME,
+    updated_at DATETIME,
+    PRIMARY KEY (id)
 )
-
-const TableName<%= h.changeCase.pascal(entity) %> = "<%= h.changeCase.camel(entity) %>s"
-
-//go:embed <%= h.changeCase.camel(entity) %>s.sql
-var <%= h.changeCase.camel(entity) %>sTableSql string
-
-func <%= h.changeCase.pascal(entity) %>s() string {
-
-	cmd := fmt.Sprintf(<%= h.changeCase.camel(entity) %>sTableSql, TableName<%= h.changeCase.pascal(entity) %>)
-	return cmd
-}

@@ -10,10 +10,10 @@ import (
 	"github.com/toshi0228/blockchain/src/usecase/<%=　h.changeCase.lower(entity) %>usecase/input"
 )
 
-type <%= h.changeCase.pascal(entity) %>>RepositoryImpl struct{}
+type <%= h.changeCase.pascal(entity) %>RepositoryImpl struct{}
 
 
-func New<%= entity %>RepositoryImpl() *<%= h.changeCase.pascal(entity) %>RepositoryImpl {
+func New<%= h.changeCase.pascal(entity) %>RepositoryImpl() *<%= h.changeCase.pascal(entity) %>RepositoryImpl {
 	return &<%= h.changeCase.pascal(entity) %>RepositoryImpl{}
 }
 

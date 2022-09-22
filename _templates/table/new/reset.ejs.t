@@ -1,7 +1,7 @@
 ---
-to: src/infra/db/createTables.go
+to: src/infra/db/reset.go
 unless_exists: true
 inject: true
-after: createTableCMD
+after: tableList
 ---
-	"<%= h.changeCase.camel(entity) %>s":    dbtable.<%= h.changeCase.camel(entity) %>s(),
+	"<%= h.changeCase.camel(table) %>s":    dbtable.TableName<%= h.changeCase.pascal(table) %>s,
