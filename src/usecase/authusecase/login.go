@@ -25,14 +25,14 @@ func (use *Loginusecase) Exec(in *input.LoginInput) (*output.LoginUser, error) {
 	key := vo.NewCryptKey()
 
 	return &output.LoginUser{
-		User: &output.User{
+		User: &output.LoginU{
 			ID:        user.Id().Value(),
 			Name:      user.Name(),
 			CreatedAt: user.CreatedAt().Value(),
 			UpdatedAt: user.UpdatedAt().Value(),
 		},
 
-		Wallet: &output.Wallet{
+		Wallet: &output.LoginUserWallet{
 			ID:                user.Wallet().Id().Value(),
 			UserID:            user.Wallet().UserID().Value(),
 			BlockchainAddress: user.Wallet().BlockchainAddress(),
@@ -40,7 +40,7 @@ func (use *Loginusecase) Exec(in *input.LoginInput) (*output.LoginUser, error) {
 			UpdatedAt:         user.UpdatedAt().Value(),
 		},
 
-		CryptKey: &output.CryptKey{
+		CryptKey: &output.LoginUserCryptKey{
 			PrivateKey: key.PrivateKeyValue(),
 			PublicKey:  key.PublicKeyValue(),
 		},

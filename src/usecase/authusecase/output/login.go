@@ -3,19 +3,19 @@ package output
 import "time"
 
 type LoginUser struct {
-	User     *User     `json:"user"`
-	Wallet   *Wallet   `json:"wallet"`
-	CryptKey *CryptKey `json:"cryptKey"`
+	User     *LoginU            `json:"user"`
+	Wallet   *LoginUserWallet   `json:"wallet"`
+	CryptKey *LoginUserCryptKey `json:"cryptKey"`
 }
 
-type User struct {
+type LoginU struct {
 	ID        uint32    `json:"id"`
 	Name      string    `json:"name"`
 	CreatedAt time.Time `json:"createdAt"`
 	UpdatedAt time.Time `json:"updatedAt"`
 }
 
-type Wallet struct {
+type LoginUserWallet struct {
 	ID                uint32    `json:"iD"`
 	UserID            uint32    `json:"userID"`
 	BlockchainAddress string    `json:"blockchainAddress"`
@@ -23,7 +23,7 @@ type Wallet struct {
 	UpdatedAt         time.Time `json:"updatedAt"`
 }
 
-type CryptKey struct {
+type LoginUserCryptKey struct {
 	PrivateKey string `json:"privateKey"`
 	PublicKey  string `json:"publicKey"`
 }

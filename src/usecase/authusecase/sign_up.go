@@ -21,34 +21,34 @@ func NewSignUp(AuthRepo IAuthRepository, walletRepo walletusecase.IWalletReposit
 
 func (use *SignUpusecase) Exec(in *input.SignUpInput) (*output.SignUpUser, error) {
 
-	u, err := use.AuthRepository.SignUp(in)
+	user, err := use.AuthRepository.SignUp(in)
 	if err != nil {
 		return nil, err
 	}
 
-	w, err := use.walletRepository.Create(u.Id().Value())
+	wallet, err := use.walletRepository.Create(user.Id().Value())
 	if err != nil {
 		return nil, err
 	}
 
-	k := vo.NewCryptKey()
+	key := vo.NewCryptKey()
 
 	return &output.SignUpUser{
 
 		User: &output.SignUpU{
-			ID:        u.Id().Value(),
-			Name:      u.Name(),
-			CreatedAt: u.CreatedAt().Value(),
-			UpdatedAt: u.UpdatedAt().Value(),
+			ID:        user.Id().Value(),
+			Name:      user.Name(),
+			CreatedAt: user.CreatedAt().Value(),
+			UpdatedAt: user.UpdatedAt().Value(),
 		},
 
 		Wallet: &output.SignUpUserWallet{
-			Address: w.BlockchainAddress(),
+			Address: wallet.BlockchainAddress(),
 		},
 
 		CryptKey: &output.SignUpUserCryptKey{
-			PrivateKey: k.PrivateKeyValue(),
-			PublicKey:  k.PublicKeyValue(),
+			PrivateKey: key.PrivateKeyValue(),
+			PublicKey:  key.PublicKeyValue(),
 		},
 	}, nil
 }
