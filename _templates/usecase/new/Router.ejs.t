@@ -21,7 +21,7 @@ func New<%= h.changeCase.pascal(entity) %>Router(e *echo.Echo) {
 	//		return fmt.Errorf("エラー")
 	//	}
 	//
-	//	userRepoImpl := database.New<%= h.changeCase.pascal(entity) %>RepositoryImpl()
+	//	<%= h.changeCase.camel(entity) %>RepoImpl := database.New<%= h.changeCase.pascal(entity) %>RepositoryImpl()
 	//	err = controller.New<%= h.changeCase.pascal(entity) %>Controller(presenter.New<%= h.changeCase.pascal(entity) %>Presenter(c), <%= h.changeCase.camel(entity) %>RepoImpl).<%=　h.changeCase.pascal(useCaseName) %>(in)
 	//	if err != nil {
 	//		return c.JSON(http.StatusInternalServerError, err.Error())
