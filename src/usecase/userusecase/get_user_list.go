@@ -25,7 +25,7 @@ func (use *GetUserListusecase) Exec() (*output.UserList, error) {
 	for i, user := range users {
 
 		outputUsers[i] = &output.User{
-		
+
 			UserItem: &output.UserItem{
 				ID:        user.Id().Value(),
 				Name:      user.Name(),
