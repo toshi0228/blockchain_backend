@@ -7,7 +7,7 @@ package database
 import (
 	_ "embed"
 	"github.com/toshi0228/blockchain/src/entity"
-	"github.com/toshi0228/blockchain/src/usecase/<%= entity %>usecase/input"
+	"github.com/toshi0228/blockchain/src/usecase/<%=　h.changeCase.lower(entity) %>usecase/input"
 )
 
 type <%= entity %>RepositoryImpl struct{}
@@ -25,9 +25,9 @@ func New<%= entity %>RepositoryImpl() *<%= entity %>RepositoryImpl {
 var <%= h.changeCase.camel(method) %><%= h.changeCase.pascal(entity) %>Sql string
 
 
-func (repo *<%= entity %>RepositoryImpl) <%= h.changeCase.pascal(method) %>(in *input.<%= h.changeCase.pascal(useCaseName) %>Input) ([]*entity.<%= entity %>, error) {
+func (repo *<%= entity %>RepositoryImpl) <%= h.changeCase.pascal(method) %>(in *input.<%= h.changeCase.pascal(useCaseName) %>Input) ([]*entity.<%= h.changeCase.pascal(entity) %>, error) {
 
-	//_, err := entity.New<%= entity %>(in.Name)
+	//_, err := entity.New<%= h.changeCase.pascal(entity) %>(in.Name)
 	//if err != nil {
 	//	return nil, fmt.Errorf(err.Error())
 	//}
