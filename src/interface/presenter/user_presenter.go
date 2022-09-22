@@ -2,8 +2,6 @@ package presenter
 
 import (
 	"github.com/labstack/echo/v4"
-	"github.com/toshi0228/blockchain/src/usecase/userusecase/output"
-	"net/http"
 )
 
 type userPresent struct {
@@ -15,9 +13,4 @@ func NewUserPresenter(p echo.Context) IUserPresenter {
 }
 
 type IUserPresenter interface {
-	LoginUser(out *output.LoginUser) error
-}
-
-func (p *userPresent) LoginUser(out *output.LoginUser) error {
-	return p.ctx.JSON(http.StatusOK, out)
 }

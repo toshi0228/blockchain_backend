@@ -41,20 +41,4 @@ func NewUserRouter(e *echo.Echo) {
 		return c.JSON(http.StatusOK, createUser)
 	})
 
-	//e.POST("/user/login", func(c echo.Context) error {
-	//
-	//	in := &input.LoginUserInput{}
-	//	err := c.Bind(in)
-	//	if err != nil {
-	//		return fmt.Errorf("エラー")
-	//	}
-	//
-	//	userRepoImpl := database.NewUserRepositoryImpl()
-	//	err = controller.NewUserController(presenter.NewUserPresenter(c), userRepoImpl).LoginUser(in)
-	//	if err != nil {
-	//		return c.JSON(http.StatusInternalServerError, err.Error())
-	//	}
-	//
-	//	return nil
-	//})
 }
