@@ -7,14 +7,16 @@ import (
 )
 
 type authController struct {
-    delivery presenter.IAuthPresenter
-	authRepo authusecase.IAuthRepository
+	delivery   presenter.IAuthPresenter
+	authRepo   authusecase.IAuthRepository
+	walletRepo authusecase.IWalletRepository
 }
 
-func NewAuthController(p presenter.IAuthPresenter, authRepo authusecase.IAuthRepository) *authController {
+func NewAuthController(p presenter.IAuthPresenter, authRepo authusecase.IAuthRepository, walletRepo authusecase.IWalletRepository) *authController {
 	return &authController{
-	    delivery: p,
-		authRepo: authRepo,
+		delivery:   p,
+		authRepo:   authRepo,
+		walletRepo: walletRepo,
 	}
 }
 
@@ -26,4 +28,13 @@ func (c *authController) Login(in *input.LoginInput) error {
 	}
 
 	return c.delivery.LoginUser(out)
+}
+func (c *authController) SignUp(in *input.SignUpInput) error {
+	usecase := authusecase.NewSignUp(c.authRepo, c.walletRepo)
+	out, err := usecase.Exec(in)
+	if err != nil {
+		return err
+	}
+
+	return c.delivery.SignUpUser(out)
 }

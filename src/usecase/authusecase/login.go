@@ -32,7 +32,7 @@ func (use *Loginusecase) Exec(in *input.LoginInput) (*output.LoginUser, error) {
 			UpdatedAt: user.UpdatedAt().Value(),
 		},
 
-		Wallet: &output.UserWallet{
+		Wallet: &output.Wallet{
 			ID:                user.Wallet().Id().Value(),
 			UserID:            user.Wallet().UserID().Value(),
 			BlockchainAddress: user.Wallet().BlockchainAddress(),

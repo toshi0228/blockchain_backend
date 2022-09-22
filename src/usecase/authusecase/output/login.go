@@ -3,9 +3,9 @@ package output
 import "time"
 
 type LoginUser struct {
-	User     *User       `json:"user"`
-	Wallet   *UserWallet `json:"wallet"`
-	CryptKey *CryptKey   `json:"cryptKey"`
+	User     *User     `json:"user"`
+	Wallet   *Wallet   `json:"wallet"`
+	CryptKey *CryptKey `json:"cryptKey"`
 }
 
 type User struct {
@@ -15,7 +15,7 @@ type User struct {
 	UpdatedAt time.Time `json:"updatedAt"`
 }
 
-type UserWallet struct {
+type Wallet struct {
 	ID                uint32    `json:"iD"`
 	UserID            uint32    `json:"userID"`
 	BlockchainAddress string    `json:"blockchainAddress"`

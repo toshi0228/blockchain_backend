@@ -6,5 +6,6 @@ import (
 )
 
 type IAuthRepository interface {
+	SignUp(in *input.SignUpInput) (*entity.User, error)
 	Login(in *input.LoginInput) (*entity.UserPager, error)
 }

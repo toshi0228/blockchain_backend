@@ -11,23 +11,24 @@ import (
 )
 
 func NewAuthRouter(e *echo.Echo) {
+	e.POST("/auth/signup", func(c echo.Context) error {
 
-	//e.POST("/user/login", func(c echo.Context) error {
-	//
-	//	in := &input.LoginUserInput{}
-	//	err := c.Bind(in)
-	//	if err != nil {
-	//		return fmt.Errorf("エラー")
-	//	}
-	//
-	//	userRepoImpl := database.NewAuthRepositoryImpl()
-	//	err = controller.NewAuthController(presenter.NewUserPresenter(c), userRepoImpl).LoginUser(in)
-	//	if err != nil {
-	//		return c.JSON(http.StatusInternalServerError, err.Error())
-	//	}
-	//
-	//	return nil
-	//})
+		in := &input.SignUpInput{}
+		err := c.Bind(in)
+		if err != nil {
+			return fmt.Errorf("エラー")
+		}
+
+		authRepoImpl := database.NewAuthRepositoryImpl()
+		walletRepoImpl := database.NewWalletRepositoryImpl()
+
+		err = controller.NewAuthController(presenter.NewAuthPresenter(c), authRepoImpl, walletRepoImpl).SignUp(in)
+		if err != nil {
+			return c.JSON(http.StatusInternalServerError, err.Error())
+		}
+
+		return nil
+	})
 
 	e.POST("/auth/login", func(c echo.Context) error {
 
@@ -38,7 +39,8 @@ func NewAuthRouter(e *echo.Echo) {
 		}
 
 		authRepoImpl := database.NewAuthRepositoryImpl()
-		err = controller.NewAuthController(presenter.NewAuthPresenter(c), authRepoImpl).Login(in)
+		walletRepoImpl := database.NewWalletRepositoryImpl()
+		err = controller.NewAuthController(presenter.NewAuthPresenter(c), authRepoImpl, walletRepoImpl).Login(in)
 		if err != nil {
 			return c.JSON(http.StatusInternalServerError, err.Error())
 		}
