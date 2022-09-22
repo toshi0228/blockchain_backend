@@ -4,23 +4,26 @@ import (
 	"github.com/toshi0228/blockchain/src/entity/vo"
 	"github.com/toshi0228/blockchain/src/usecase/authusecase/input"
 	"github.com/toshi0228/blockchain/src/usecase/authusecase/output"
+	"log"
 )
 
 type Loginusecase struct {
-	AuthRepository IAuthRepository
+	authRepository IAuthRepository
 }
 
-func NewLogin(AuthRepo IAuthRepository) *Loginusecase {
+func NewLogin(authRepo IAuthRepository) *Loginusecase {
 	return &Loginusecase{
-		AuthRepository: AuthRepo,
+		authRepository: authRepo,
 	}
 }
 
 func (use *Loginusecase) Exec(in *input.LoginInput) (*output.LoginUser, error) {
-	user, err := use.AuthRepository.Login(in)
+	user, err := use.authRepository.Login(in)
 	if err != nil {
 		return nil, err
 	}
+
+	log.Println(user)
 
 	key := vo.NewCryptKey()
 
@@ -33,11 +36,11 @@ func (use *Loginusecase) Exec(in *input.LoginInput) (*output.LoginUser, error) {
 		},
 
 		Wallet: &output.LoginUserWallet{
-			ID:                user.Wallet().Id().Value(),
-			UserID:            user.Wallet().UserID().Value(),
-			BlockchainAddress: user.Wallet().BlockchainAddress(),
-			CreatedAt:         user.Wallet().CreatedAt().Value(),
-			UpdatedAt:         user.UpdatedAt().Value(),
+			ID:        user.Wallet().Id().Value(),
+			UserID:    user.Wallet().UserID().Value(),
+			Address:   user.Wallet().BlockchainAddress(),
+			CreatedAt: user.Wallet().CreatedAt().Value(),
+			UpdatedAt: user.UpdatedAt().Value(),
 		},
 
 		CryptKey: &output.LoginUserCryptKey{

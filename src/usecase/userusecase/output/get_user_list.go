@@ -17,9 +17,9 @@ type UserItem struct {
 }
 
 type WalletItem struct {
-	ID                uint32    `json:"iD"`
-	UserID            uint32    `json:"userID"`
-	BlockchainAddress string    `json:"blockchainAddress"`
-	CreatedAt         time.Time `json:"createdAt"`
-	UpdatedAt         time.Time `json:"updatedAt"`
+	ID        uint32    `json:"iD"`
+	UserID    uint32    `json:"userID"`
+	Address   string    `json:"address"`
+	CreatedAt time.Time `json:"createdAt"`
+	UpdatedAt time.Time `json:"updatedAt"`
 }

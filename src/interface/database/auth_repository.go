@@ -27,12 +27,11 @@ var loginAuthSql string
 func (repo *AuthRepositoryImpl) Login(in *input.LoginInput) (*entity.UserPager, error) {
 
 	rows, err := db.Conn().Queryx(loginAuthSql, in.Name, in.Password)
+	defer rows.Close()
 	if err != nil {
 		log.Fatalln(err)
 		return nil, err
 	}
-
-	defer rows.Close()
 
 	var users []*entity.UserPager
 

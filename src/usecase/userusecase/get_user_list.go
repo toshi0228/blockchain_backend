@@ -22,17 +22,19 @@ func (use *GetUserListusecase) Exec() (*output.UserList, error) {
 
 	userItems := make([]*output.UserItem, len(users))
 	for i, user := range users {
+
 		userItems[i] = &output.UserItem{
 			ID:        user.Id().Value(),
 			Name:      user.Name(),
 			CreatedAt: user.CreatedAt().Value(),
 			UpdatedAt: user.UpdatedAt().Value(),
+
 			Wallet: &output.WalletItem{
-				ID:                user.Wallet().Id().Value(),
-				UserID:            user.Wallet().UserID().Value(),
-				BlockchainAddress: user.Wallet().BlockchainAddress(),
-				CreatedAt:         user.Wallet().CreatedAt().Value(),
-				UpdatedAt:         user.UpdatedAt().Value(),
+				ID:        user.Wallet().Id().Value(),
+				UserID:    user.Wallet().UserID().Value(),
+				Address:   user.Wallet().BlockchainAddress(),
+				CreatedAt: user.Wallet().CreatedAt().Value(),
+				UpdatedAt: user.UpdatedAt().Value(),
 			},
 		}
 	}

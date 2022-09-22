@@ -26,6 +26,8 @@ func connImpl() {
 	fmt.Println("一度しか呼ばれないDB接続")
 	//環境ごとにDBの接続先が切り替る
 	dbConf := toggleDBConf()
+
+	log.Println(dbConf)
 	sqlDriver, connErr = sqlx.Open("mysql", dbConf)
 
 	if connErr != nil {
@@ -48,7 +50,7 @@ func toggleDBConf() string {
 		return "docker:docker@tcp(db:3306)/bc_db?parseTime=true&loc=Asia%2FTokyo"
 
 	default: //ローカル　=> DBコンテナ (テスト)
-		return "docker:docker@tcp(127.0.0.1:3308)/bc_db?parseTime=true&loc=Asia%2FTokyo"
+		return "docker:docker@tcp(127.0.0.1:3310)/bc_db?parseTime=true&loc=Asia%2FTokyo"
 	}
 }
 

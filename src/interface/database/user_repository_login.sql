@@ -10,8 +10,7 @@ SELECT
     w.created_at AS wallet_created_at,
     w.updated_at AS wallet_updated_at
 FROM
-    users
-LEFT JOIN wallets w on users.id = w.user_id
+    users LEFT JOIN wallets w on users.id = w.user_id
 WHERE
     name = ? && password = ?
 

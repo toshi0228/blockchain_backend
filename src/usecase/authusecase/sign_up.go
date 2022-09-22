@@ -7,20 +7,20 @@ import (
 )
 
 type SignUpusecase struct {
-	AuthRepository   IAuthRepository
+	authRepository   IAuthRepository
 	walletRepository IWalletRepository
 }
 
 func NewSignUp(AuthRepo IAuthRepository, walletRepo IWalletRepository) *SignUpusecase {
 	return &SignUpusecase{
-		AuthRepository:   AuthRepo,
+		authRepository:   AuthRepo,
 		walletRepository: walletRepo,
 	}
 }
 
 func (use *SignUpusecase) Exec(in *input.SignUpInput) (*output.SignUpUser, error) {
 
-	user, err := use.AuthRepository.SignUp(in)
+	user, err := use.authRepository.SignUp(in)
 	if err != nil {
 		return nil, err
 	}
