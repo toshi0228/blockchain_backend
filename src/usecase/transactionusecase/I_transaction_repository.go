@@ -6,6 +6,5 @@ import (
 )
 
 type ITransactionRepository interface {
-	Create(in *input.CreateTransactionInput) ([]*entity.Transaction, error)
+	Create(in *input.CreateTransactionInput) (*entity.Transaction, error)
 }
-

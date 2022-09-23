@@ -2,7 +2,9 @@ package database
 
 import (
 	_ "embed"
+	"fmt"
 	"github.com/toshi0228/blockchain/src/entity"
+	"github.com/toshi0228/blockchain/src/infra/db"
 	"github.com/toshi0228/blockchain/src/usecase/transactionusecase/input"
 )
 
@@ -19,16 +21,26 @@ func NewTransactionRepositoryImpl() *TransactionRepositoryImpl {
 //go:embed transaction_repository_create.sql
 var createTransactionSql string
 
-func (repo *TransactionRepositoryImpl) Create(in *input.CreateTransactionInput) ([]*entity.Transaction, error) {
+func (repo *TransactionRepositoryImpl) Create(in *input.CreateTransactionInput) (*entity.Transaction, error) {
 
-	//_, err := entity.NewTransaction(in.Name)
-	//if err != nil {
-	//	return nil, fmt.Errorf(err.Error())
-	//}
+	tx, err := entity.GenWhenCreateTransaction(in.SenderAddress, in.RecipientAddress, in.Amount)
 
-	//cmd := fmt.Sprintf(createTransactionSql, ***)
+	if err != nil {
+		return nil, fmt.Errorf(err.Error())
+	}
 
-	//_, err = db.Conn().Exec(createTransactionSql, u.Id())
+	_, err = db.Conn().Exec(
+		createTransactionSql,
+		tx.Id().Value(),
+		tx.SenderAddress(),
+		tx.RecipientAddress(),
+		tx.Value(),
+		tx.CreatedAt().Value(),
+		tx.UpdatedAt().Value(),
+	)
+	if err != nil {
+		return nil, err
+	}
 
-	return nil, nil
+	return tx, nil
 }

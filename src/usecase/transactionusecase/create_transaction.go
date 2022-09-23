@@ -16,11 +16,17 @@ func NewCreateTransaction(transactionRepo ITransactionRepository) *CreateTransac
 }
 
 func (use *CreateTransactionusecase) Exec(in *input.CreateTransactionInput) (*output.CreateTransaction, error) {
-	_, err := use.transactionRepository.Create(in)
+	tx, err := use.transactionRepository.Create(in)
 	if err != nil {
 		return nil, err
 	}
 
-	return &output.CreateTransaction{}, nil
+	return &output.CreateTransaction{
+		ID:               tx.Id().Value(),
+		SenderAddress:    tx.SenderAddress(),
+		RecipientAddress: tx.RecipientAddress(),
+		Value:            tx.Value(),
+		CreatedAt:        tx.CreatedAt().Value(),
+		UpdatedAt:        tx.UpdatedAt().Value(),
+	}, nil
 }
-

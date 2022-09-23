@@ -37,7 +37,7 @@ func (bc *BlockChain) LastBlock() *Block {
 }
 
 // AddTransaction トランザクションの作成
-func (bc *BlockChain) AddTransaction(sender string, recipient string, value float32,
+func (bc *BlockChain) AddTransaction(sender string, recipient string, value uint64,
 	senderPublicKey *ecdsa.PublicKey, s *Signature) bool {
 	t := NewTransaction(sender, recipient, value)
 
@@ -66,7 +66,7 @@ func (bc *BlockChain) VerifyTransactionSignature(senderPublicKey *ecdsa.PublicKe
 func (bc *BlockChain) CopyTransactionPool() []*Transaction {
 	transactions := make([]*Transaction, 0)
 	for _, t := range bc.transactionPool {
-		transactions = append(transactions, NewTransaction(t.senderBlockChainAddress, t.recipientBlockChainAddress, t.value))
+		transactions = append(transactions, NewTransaction(t.senderAddress, t.recipientAddress, t.value))
 	}
 	return transactions
 }
@@ -90,16 +90,16 @@ func (bc *BlockChain) Mining() bool {
 }
 
 // CalculateTotalAmount アドレスごとの所持金額
-func (bc *BlockChain) CalculateTotalAmount(blockChainAddress string) float32 {
-	var totalAmount float32 = 0.0
+func (bc *BlockChain) CalculateTotalAmount(blockChainAddress string) uint64 {
+	var totalAmount uint64 = 0
 	for _, b := range bc.chain {
 		for _, t := range b.transactions {
 			value := t.value
-			if blockChainAddress == t.recipientBlockChainAddress {
+			if blockChainAddress == t.recipientAddress {
 				totalAmount += value
 			}
 
-			if blockChainAddress == t.senderBlockChainAddress {
+			if blockChainAddress == t.senderAddress {
 				totalAmount -= value
 			}
 		}

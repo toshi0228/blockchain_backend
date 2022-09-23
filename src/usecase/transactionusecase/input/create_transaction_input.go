@@ -1,6 +1,7 @@
 package input
 
 type CreateTransactionInput struct {
-	ID uint32
+	SenderAddress    string `json:"senderAddress"`
+	RecipientAddress string `json:"recipientAddress"`
+	Amount           uint64 `json:"amount"`
 }
-

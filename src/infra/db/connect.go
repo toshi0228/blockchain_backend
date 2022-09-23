@@ -23,11 +23,8 @@ func Conn() *sqlx.DB {
 //実際にDBに接続　※実際には一度しか呼ばれない
 func connImpl() {
 
-	fmt.Println("一度しか呼ばれないDB接続")
 	//環境ごとにDBの接続先が切り替る
 	dbConf := toggleDBConf()
-
-	log.Println(dbConf)
 	sqlDriver, connErr = sqlx.Open("mysql", dbConf)
 
 	if connErr != nil {

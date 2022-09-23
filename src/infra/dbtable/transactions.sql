@@ -1,9 +1,9 @@
 CREATE TABLE IF NOT EXISTS %s
 (
     id CHAR(40) NOT NULL,
-    senderAddress CHAR(40),
-    recipientAddress CHAR(40),
-    amount DECIMAL(20,2),
+    sender_address CHAR(40),
+    recipient_address CHAR(40),
+    amount INT UNSIGNED,
     created_at DATETIME,
     updated_at DATETIME,
     PRIMARY KEY (id)
