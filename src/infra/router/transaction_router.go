@@ -12,7 +12,7 @@ import (
 
 func NewTransactionRouter(e *echo.Echo) {
 
-	e.POST("/transaction/CreateTransaction", func(c echo.Context) error {
+	e.POST("/transaction", func(c echo.Context) error {
 
 		in := &input.CreateTransactionInput{}
 		err := c.Bind(in)
@@ -30,4 +30,3 @@ func NewTransactionRouter(e *echo.Echo) {
 	})
 
 }
-
