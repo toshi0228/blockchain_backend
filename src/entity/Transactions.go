@@ -2,8 +2,11 @@ package entity
 
 import (
 	"crypto/ecdsa"
+	"crypto/sha256"
+	"encoding/json"
 	"fmt"
 	"github.com/toshi0228/blockchain/src/entity/vo"
+	"log"
 	"strings"
 )
 
@@ -64,6 +67,31 @@ func (t *Transactions) Print() {
 func GenWhenCreateTransactions(senderAddress, recipientAddress, senderPrivateKeyHex, senderPublicKeyHex, signatureHex string, value uint64) (*Transactions, error) {
 
 	publicKey := vo.PublicKeyFromString(senderPublicKeyHex)
+
+	// {"recipientAddress":"JdDfxqdCryQyArgL7nsorExmoPMJB9RzP","senderAddress":"1PRJPrEMiXre3bTuQMEHaRnZR2v5Z1anw3","amount":12}
+
+	//TODO　改竄されていないかチェック
+	type tx struct {
+		RecipientAddress string `json:"recipientAddress"`
+		SenderAddress    string `json:"senderAddress"`
+		Value            uint64 `json:"amount"`
+	}
+	var x tx
+
+	x.RecipientAddress = recipientAddress
+	x.SenderAddress = senderAddress
+	x.Value = value
+
+	v, _ := json.Marshal(x)
+	log.Println(string(v))
+
+	hash := sha256.Sum256([]byte(string(v)))
+
+	signature := SignatureFromString(signatureHex)
+
+	//改竄されていないか検証
+	valid := ecdsa.Verify(publicKey, hash[:], signature.R, signature.S)
+	fmt.Println("signature verified:", valid)
 
 	return &Transactions{
 		id:               vo.NewID(),
