@@ -1,46 +1,50 @@
 package entity
 
 import (
+	"crypto/ecdsa"
 	"fmt"
 	"github.com/toshi0228/blockchain/src/entity/vo"
 	"strings"
 )
 
-type Transaction struct {
+type Transactions struct {
 	id               vo.ID `json:"id"`
 	senderAddress    string
 	recipientAddress string
 	value            uint64
+	signature        *Signature
+	senderPrivateKey *ecdsa.PrivateKey
+	senderPublicKey  *ecdsa.PublicKey
 	createdAt        vo.CreatedAt `json:"createdAt"`
 	updatedAt        vo.UpdatedAt `json:"updatedAt"`
 }
 
-func (t *Transaction) Id() vo.ID {
+func (t *Transactions) Id() vo.ID {
 	return t.id
 }
 
-func (t *Transaction) SenderAddress() string {
+func (t *Transactions) SenderAddress() string {
 	return t.senderAddress
 }
 
-func (t *Transaction) RecipientAddress() string {
+func (t *Transactions) RecipientAddress() string {
 	return t.recipientAddress
 }
 
-func (t *Transaction) Value() uint64 {
+func (t *Transactions) Value() uint64 {
 	return t.value
 }
 
-func (t *Transaction) CreatedAt() vo.CreatedAt {
+func (t *Transactions) CreatedAt() vo.CreatedAt {
 	return t.createdAt
 }
 
-func (t *Transaction) UpdatedAt() vo.UpdatedAt {
+func (t *Transactions) UpdatedAt() vo.UpdatedAt {
 	return t.updatedAt
 }
 
-// NewTransaction トランザクションの作成
-func NewTransaction(senderAddress string, recipientAddress string, value uint64) *Transaction {
+// NewTransactions トランザクションの作成
+func NewTransactions(senderAddress string, recipientAddress string, value uint64) *Transaction {
 
 	return &Transaction{
 		senderAddress:    senderAddress,
@@ -49,20 +53,26 @@ func NewTransaction(senderAddress string, recipientAddress string, value uint64)
 	}
 }
 
-func (t *Transaction) Print() {
+func (t *Transactions) Print() {
 	fmt.Printf("%s \n", strings.Repeat("-", 40))
 	fmt.Printf("送信者 : %s\n", t.senderAddress)
 	fmt.Printf("受取人 : %s\n", t.recipientAddress)
 	fmt.Printf("金額 : %v\n", t.value)
 }
 
-// GenWhenCreateTransaction トランザクションの新規登録の作成
-func GenWhenCreateTransaction(senderAddress string, recipientAddress string, value uint64) (*Transaction, error) {
-	return &Transaction{
+// GenWhenCreateTransactions トランザクションの新規登録の作成
+func GenWhenCreateTransactions(senderAddress, recipientAddress, senderPrivateKeyHex, senderPublicKeyHex, signatureHex string, value uint64) (*Transactions, error) {
+
+	publicKey := vo.PublicKeyFromString(senderPublicKeyHex)
+
+	return &Transactions{
 		id:               vo.NewID(),
 		senderAddress:    senderAddress,
 		recipientAddress: recipientAddress,
 		value:            value,
+		senderPrivateKey: vo.PrivateKeyFromString(senderPrivateKeyHex, publicKey),
+		senderPublicKey:  publicKey,
+		signature:        SignatureFromString(signatureHex),
 		createdAt:        vo.NewCreatedAt(),
 		updatedAt:        vo.NewUpdatedAt(),
 	}, nil

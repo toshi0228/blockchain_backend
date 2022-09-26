@@ -6,4 +6,5 @@ type CreateTransactionInput struct {
 	Amount           uint64 `json:"amount"`
 	PrivateKey       string `json:"privateKey"`
 	PublicKey        string `json:"publicKey"`
+	Signature        string `json:"signature"`
 }

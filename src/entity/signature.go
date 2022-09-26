@@ -2,6 +2,7 @@ package entity
 
 import (
 	"fmt"
+	"github.com/toshi0228/blockchain/src/entity/vo"
 	"math/big"
 )
 
@@ -16,4 +17,10 @@ func NewSignature(r *big.Int, s *big.Int) *Signature {
 
 func (s *Signature) String() string {
 	return fmt.Sprintf("%x%x", s.R, s.S)
+}
+
+// SignatureFromString 文字列から署名を取得
+func SignatureFromString(x string) *Signature {
+	r, s := vo.String2bigIntTuple(x)
+	return &Signature{&r, &s}
 }

@@ -21,9 +21,9 @@ func NewTransactionRepositoryImpl() *TransactionRepositoryImpl {
 //go:embed transaction_repository_create.sql
 var createTransactionSql string
 
-func (repo *TransactionRepositoryImpl) Create(in *input.CreateTransactionInput) (*entity.Transaction, error) {
+func (repo *TransactionRepositoryImpl) Create(in *input.CreateTransactionInput) (*entity.Transactions, error) {
 
-	tx, err := entity.GenWhenCreateTransaction(in.SenderAddress, in.RecipientAddress, in.Amount)
+	tx, err := entity.GenWhenCreateTransactions(in.SenderAddress, in.RecipientAddress, in.PrivateKey, in.PublicKey, in.Signature, in.Amount)
 
 	if err != nil {
 		return nil, fmt.Errorf(err.Error())
