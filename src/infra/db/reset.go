@@ -10,6 +10,7 @@ var tableList = map[string]string{
 	"profiles":     dbtable.TableNameProfile,
 	"wallets":      dbtable.TableNameWallet,
 	"transactions": dbtable.TableNameTransaction,
+	"blocks":       dbtable.TableNameBlock,
 }
 
 func Reset() error {

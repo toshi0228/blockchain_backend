@@ -10,6 +10,7 @@ var createTableCMD = map[string]string{
 	"profiles":     dbtable.Profiles(),
 	"wallets":      dbtable.Wallets(),
 	"transactions": dbtable.Transactions(),
+	"blocks":       dbtable.Blocks(),
 }
 
 // CreateTables テーブルの作成 (テーブルがなければ作成される)
