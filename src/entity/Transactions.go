@@ -85,9 +85,11 @@ func GenWhenCreateTransactions(senderAddress, recipientAddress, senderPrivateKey
 	v, _ := json.Marshal(x)
 	log.Println(string(v))
 
-	hash := sha256.Sum256([]byte(string(v)))
-
+	hash := sha256.Sum256(v)
 	signature := SignatureFromString(signatureHex)
+
+	// 改竄して場合
+	hash = sha256.Sum256([]byte("HI"))
 
 	//改竄されていないか検証
 	valid := ecdsa.Verify(publicKey, hash[:], signature.R, signature.S)
