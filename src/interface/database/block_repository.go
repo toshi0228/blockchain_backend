@@ -28,7 +28,7 @@ var findPrevBlockSql string
 func (repo *BlockRepositoryImpl) Create(in *input.CreateBlockInput) ([]*entity.Block, error) {
 
 	// TODO ブロックがなければ作成
-	// TODO 前のブロックを作成
+	// TODO トランザクションプールのデータを取得
 
 	//一個前のブロックのハッシュを取得
 	row := db.Conn().QueryRow(findPrevBlockSql)
@@ -38,15 +38,10 @@ func (repo *BlockRepositoryImpl) Create(in *input.CreateBlockInput) ([]*entity.B
 		return nil, err
 	}
 
-	log.Println(prevHash)
-	log.Println(prevHash)
-
 	b, err := entity.NewBlock(in.Nonce, prevHash, in.TransactionsHash)
 	if err != nil {
 		return nil, fmt.Errorf(err.Error())
 	}
-
-	//cmd := fmt.Sprintf(createBlockSql, ***)
 
 	_, err = db.Conn().Exec(
 		createBlockSql,

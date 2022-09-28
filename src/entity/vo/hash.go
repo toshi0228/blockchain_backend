@@ -36,17 +36,3 @@ func NewHashToHex(byte []byte) Hash {
 func (h Hash) Value() string {
 	return fmt.Sprintf("%x", h)
 }
-
-//
-//func (s StringData) Equals(s2 StringData) bool {
-//	return s == s2
-//}
-//
-//// Hash ハッシュ化
-//func (s StringData) Hash() [32]byte {
-//	return sha256.Sum256([]byte(s))
-//}
-//
-//func (s StringData) HashToHex() string {
-//	return fmt.Sprintf("%x", sha256.Sum256([]byte(s)))
-//}
