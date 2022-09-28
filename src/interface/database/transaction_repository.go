@@ -6,6 +6,7 @@ import (
 	"github.com/toshi0228/blockchain/src/entity"
 	"github.com/toshi0228/blockchain/src/infra/db"
 	"github.com/toshi0228/blockchain/src/usecase/transactionusecase/input"
+	"log"
 )
 
 type TransactionRepositoryImpl struct{}
@@ -26,6 +27,7 @@ func (repo *TransactionRepositoryImpl) Create(in *input.CreateTransactionInput) 
 	tx, err := entity.GenWhenCreateTransactions(in.SenderAddress, in.RecipientAddress, in.PrivateKey, in.PublicKey, in.Signature, in.Amount)
 
 	if err != nil {
+		log.Println(err)
 		return nil, fmt.Errorf(err.Error())
 	}
 

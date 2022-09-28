@@ -6,11 +6,13 @@ import (
 )
 
 var createTableCMD = map[string]string{
-	"users":        dbtable.Users(),
-	"profiles":     dbtable.Profiles(),
-	"wallets":      dbtable.Wallets(),
-	"transactions": dbtable.Transactions(),
-	"blocks":       dbtable.Blocks(),
+
+	"users":            dbtable.Users(),
+	"profiles":         dbtable.Profiles(),
+	"wallets":          dbtable.Wallets(),
+	"blocks":           dbtable.Blocks(),
+	"transactions":     dbtable.Transactions(),
+	"transactionPools": dbtable.TransactionPools(),
 }
 
 // CreateTables テーブルの作成 (テーブルがなければ作成される)

@@ -6,11 +6,13 @@ import (
 )
 
 var tableList = map[string]string{
-	"users":        dbtable.TableNameUser,
-	"profiles":     dbtable.TableNameProfile,
-	"wallets":      dbtable.TableNameWallet,
-	"transactions": dbtable.TableNameTransaction,
-	"blocks":       dbtable.TableNameBlock,
+
+	"users":            dbtable.TableNameUser,
+	"profiles":         dbtable.TableNameProfile,
+	"wallets":          dbtable.TableNameWallet,
+	"blocks":           dbtable.TableNameBlock,
+	"transactions":     dbtable.TableNameTransaction,
+	"transactionPools": dbtable.TableNameTransactionPool,
 }
 
 func Reset() error {
