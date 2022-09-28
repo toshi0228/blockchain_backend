@@ -4,7 +4,8 @@ INSERT INTO blocks
     nonce,
     previous_hash,
     transactions_hash,
-    timestamp
+    timestamp,
+    hash
 )
-VALUES (?,?,?,?,?)
+VALUES (?,?,?,?,?,?)
 

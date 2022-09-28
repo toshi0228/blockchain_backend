@@ -7,12 +7,6 @@ import (
 	"github.com/toshi0228/blockchain/src/entity/vo"
 )
 
-const (
-	MiningDifficulty = 3
-	MiningSender     = "MiningSender"
-	MiningReward     = 1.0
-)
-
 type Block struct {
 	id               uint32
 	nonce            uint32
@@ -54,9 +48,26 @@ func NewBlock(nonce uint32, previousHash string, transactionsHash string) (*Bloc
 }
 
 // Hash ブロックのハッシュ値を求める
-func (b *Block) Hash() [32]byte {
-	m, _ := json.Marshal(b)
-	return sha256.Sum256(m)
+func (b *Block) Hash() string {
+
+	m, _ := json.Marshal(
+		struct {
+			Id               uint32   `json:"id"`
+			Nonce            uint32   `json:"nonce"`
+			PreviousHash     [32]byte `json:"previousHash"`
+			TransactionsHash [32]byte `json:"transactionsHash"`
+			Timestamp        int64    `json:"timestamp"`
+		}{
+			Id:               b.id,
+			Nonce:            b.nonce,
+			PreviousHash:     b.previousHash,
+			TransactionsHash: b.transactionsHash,
+			Timestamp:        b.timestamp,
+		},
+	)
+
+	hash := sha256.Sum256(m)
+	return fmt.Sprintf("%x", hash)
 }
 
 // Print ブロックを見やすいように表示

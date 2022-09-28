@@ -24,18 +24,10 @@ var createBlockSql string
 
 func (repo *BlockRepositoryImpl) Create(in *input.CreateBlockInput) ([]*entity.Block, error) {
 
-	in.PreviousHash = "aae"
-	in.TransactionsHash = "aaa"
-	in.Nonce = 3
-
 	b, err := entity.NewBlock(in.Nonce, in.PreviousHash, in.TransactionsHash)
 	if err != nil {
 		return nil, fmt.Errorf(err.Error())
 	}
-
-	log.Println(b.PreviousHashToHex())
-	log.Println(b.TransactionsHashToHex())
-	log.Println(b.Timestamp())
 
 	//cmd := fmt.Sprintf(createBlockSql, ***)
 
@@ -46,6 +38,7 @@ func (repo *BlockRepositoryImpl) Create(in *input.CreateBlockInput) ([]*entity.B
 		b.PreviousHashToHex(),
 		b.TransactionsHashToHex(),
 		b.Timestamp(),
+		b.Hash(),
 	)
 
 	if err != nil {

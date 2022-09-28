@@ -5,5 +5,6 @@ CREATE TABLE IF NOT EXISTS %s
     previous_hash VARCHAR(255),
     transactions_hash VARCHAR(255),
     timestamp BIGINT UNSIGNED,
+    hash VARCHAR(255),
     PRIMARY KEY (id)
 )
