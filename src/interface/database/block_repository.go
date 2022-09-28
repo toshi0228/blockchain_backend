@@ -22,9 +22,26 @@ func NewBlockRepositoryImpl() *BlockRepositoryImpl {
 //go:embed block_repository_create.sql
 var createBlockSql string
 
+//go:embed block_repository_find_prev_block.sql
+var findPrevBlockSql string
+
 func (repo *BlockRepositoryImpl) Create(in *input.CreateBlockInput) ([]*entity.Block, error) {
 
-	b, err := entity.NewBlock(in.Nonce, in.PreviousHash, in.TransactionsHash)
+	// TODO ブロックがなければ作成
+	// TODO 前のブロックを作成
+
+	//一個前のブロックのハッシュを取得
+	row := db.Conn().QueryRow(findPrevBlockSql)
+	var prevHash string
+	err := row.Scan(&prevHash)
+	if err != nil {
+		return nil, err
+	}
+
+	log.Println(prevHash)
+	log.Println(prevHash)
+
+	b, err := entity.NewBlock(in.Nonce, prevHash, in.TransactionsHash)
 	if err != nil {
 		return nil, fmt.Errorf(err.Error())
 	}
