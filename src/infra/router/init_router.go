@@ -14,4 +14,5 @@ func InitRouter(e *echo.Echo) {
 	NewWalletRouter(e)
 	NewAuthRouter(e)
 	NewTransactionRouter(e)
+	NewBlockRouter(e)
 }
