@@ -34,10 +34,29 @@ func (repo *BlockRepositoryImpl) Create(in *input.CreateBlockInput) ([]*entity.B
 	row := db.Conn().QueryRow(findPrevBlockSql)
 	var prevHash string
 	err := row.Scan(&prevHash)
+
+	//またblockがない場合は最初のブロックを作成する
 	if err != nil {
-		return nil, err
+		in.Nonce = 1
+		b, err := entity.NewBlock(in.Nonce, prevHash, in.TransactionsHash)
+		_, err = db.Conn().Exec(
+			createBlockSql,
+			b.Id(),
+			b.Nonce(),
+			b.PreviousHashToHex(),
+			b.TransactionsHashToHex(),
+			b.Timestamp(),
+			b.Hash(),
+		)
+
+		if err != nil {
+			log.Println(err)
+			return nil, err
+		}
+		return nil, nil
 	}
 
+	//通常のブロック作成処理
 	b, err := entity.NewBlock(in.Nonce, prevHash, in.TransactionsHash)
 	if err != nil {
 		return nil, fmt.Errorf(err.Error())

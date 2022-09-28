@@ -89,7 +89,7 @@ func GenWhenCreateTransactions(senderAddress, recipientAddress, senderPrivateKey
 	signature := SignatureFromString(signatureHex)
 
 	// 改竄して場合
-	hash = sha256.Sum256([]byte("HI"))
+	//hash = sha256.Sum256([]byte("HI"))
 
 	//改竄されていないか検証
 	valid := ecdsa.Verify(publicKey, hash[:], signature.R, signature.S)
