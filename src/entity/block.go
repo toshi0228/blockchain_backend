@@ -1,8 +1,6 @@
 package entity
 
 import (
-	"crypto/sha256"
-	"encoding/hex"
 	"encoding/json"
 	"fmt"
 	"github.com/toshi0228/blockchain/src/entity/vo"
@@ -39,13 +37,6 @@ func (b *Block) Timestamp() int64 {
 
 func NewBlock(nonce uint32, previousHash string, transactionsHash string) (*Block, error) {
 
-	res, _ := hex.DecodeString(previousHash)
-
-	tmp := [32]byte{}
-	for index := range res {
-		tmp[index] = res[index]
-	}
-
 	return &Block{
 		id:               vo.NewID().Value(),
 		nonce:            nonce,
@@ -74,8 +65,7 @@ func (b *Block) Hash() string {
 		},
 	)
 
-	hash := sha256.Sum256(m)
-	return fmt.Sprintf("%x", hash)
+	return vo.NewHashToHex(m).Value()
 }
 
 // Print ブロックを見やすいように表示
