@@ -32,9 +32,11 @@ var findPrevBlockSql string
 //go:embed block_repository_find_all_transaction_pool.sql
 var findAllTransactionPoolSql string
 
-func (repo *BlockRepositoryImpl) Create(in *input.CreateBlockInput) ([]*entity.Block, error) {
+//トランザクションプールのデータを削除
+//go:embed block_repository_delete_transaction_pool.sql
+var deleteTransactionPoolSql string
 
-	// TODO トランザクションプールのデータを取得
+func (repo *BlockRepositoryImpl) Create(in *input.CreateBlockInput) ([]*entity.Block, error) {
 
 	//1つ前のブロックのハッシュを取得
 	row := db.Conn().QueryRow(findPrevBlockSql)
@@ -115,6 +117,14 @@ func (repo *BlockRepositoryImpl) Create(in *input.CreateBlockInput) ([]*entity.B
 
 	if err != nil {
 		log.Println(err)
+		return nil, err
+	}
+
+	//トランザクションをblockに詰め込んだらpoolを削除する
+	_, err = db.Conn().Exec(
+		deleteTransactionPoolSql,
+	)
+	if err != nil {
 		return nil, err
 	}
 
