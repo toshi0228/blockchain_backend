@@ -1,6 +1,10 @@
 package vo
 
-import "encoding/hex"
+import (
+	"crypto/sha256"
+	"encoding/hex"
+	"fmt"
+)
 
 type Hash [32]byte
 type HexHash string
@@ -20,8 +24,17 @@ func (hh HexHash) Value() [32]byte {
 	for index := range hexHash {
 		byte32[index] = hexHash[index]
 	}
-
 	return byte32
+}
+
+// NewHashToHex  hex => byte32
+func NewHashToHex(byte []byte) Hash {
+	return sha256.Sum256(byte)
+}
+
+// Value 32byteのハッシュ値から16進数をhash値を取得
+func (h Hash) Value() string {
+	return fmt.Sprintf("%x", h)
 }
 
 //
