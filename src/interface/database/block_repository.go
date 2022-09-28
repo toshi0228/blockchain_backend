@@ -4,6 +4,7 @@ import (
 	_ "embed"
 	"fmt"
 	"github.com/toshi0228/blockchain/src/entity"
+	"github.com/toshi0228/blockchain/src/infra/datamodel"
 	"github.com/toshi0228/blockchain/src/infra/db"
 	"github.com/toshi0228/blockchain/src/usecase/blockusecase/input"
 	"log"
@@ -19,21 +20,67 @@ func NewBlockRepositoryImpl() *BlockRepositoryImpl {
 // Block Create
 //===========================================================
 
+//ブロック作成のSQL
 //go:embed block_repository_create.sql
 var createBlockSql string
 
+//一個前のハッシュを取得するSQL
 //go:embed block_repository_find_prev_block.sql
 var findPrevBlockSql string
 
+//トランザクションプールにある全件のトランザクションデータを取得する
+//go:embed block_repository_find_all_transaction_pool.sql
+var findAllTransactionPoolSql string
+
 func (repo *BlockRepositoryImpl) Create(in *input.CreateBlockInput) ([]*entity.Block, error) {
 
-	// TODO ブロックがなければ作成
 	// TODO トランザクションプールのデータを取得
 
-	//一個前のブロックのハッシュを取得
+	//1つ前のブロックのハッシュを取得
 	row := db.Conn().QueryRow(findPrevBlockSql)
 	var prevHash string
 	err := row.Scan(&prevHash)
+
+	var transactionPool []string
+
+	// トランザクションプールの値を取得
+	txRows, err := db.Conn().Queryx(findAllTransactionPoolSql)
+	if err != nil {
+		return nil, err
+	}
+
+	for txRows.Next() {
+
+		tx := &datamodel.Transaction{}
+		err := txRows.StructScan(tx)
+
+		if err != nil {
+			fmt.Println("エラー文")
+			fmt.Println(err)
+		}
+
+		txInPool, err := entity.NewTransactionPool(
+			tx.Id,
+			tx.SenderAddress,
+			tx.RecipientAddress,
+			tx.Amount,
+			tx.CreatedAt,
+			tx.UpdatedAt,
+		)
+
+		if err != nil {
+			return nil, fmt.Errorf(err.Error())
+		}
+
+		log.Println(txInPool.ToJSON())
+
+		transactionPool = append(transactionPool, txInPool.ToJSON())
+	}
+
+	log.Println("確認したい")
+	log.Println(transactionPool)
+	log.Println(entity.TransactionPoolToHash(transactionPool))
+	log.Println(entity.TransactionPoolToHash(transactionPool))
 
 	//またblockがない場合は最初のブロックを作成する
 	if err != nil {
@@ -57,7 +104,7 @@ func (repo *BlockRepositoryImpl) Create(in *input.CreateBlockInput) ([]*entity.B
 	}
 
 	//通常のブロック作成処理
-	b, err := entity.NewBlock(in.Nonce, prevHash, in.TransactionsHash)
+	b, err := entity.NewBlock(in.Nonce, prevHash, entity.TransactionPoolToHash(transactionPool))
 	if err != nil {
 		return nil, fmt.Errorf(err.Error())
 	}
