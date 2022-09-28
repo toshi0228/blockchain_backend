@@ -7,11 +7,11 @@ import (
 )
 
 type Block struct {
-	id               uint32
-	nonce            uint32
-	previousHash     [32]byte
-	transactionsHash [32]byte
-	timestamp        int64
+	id           uint32
+	nonce        uint32
+	previousHash [32]byte
+	transactions string
+	timestamp    int64
 }
 
 func (b *Block) Id() uint32 {
@@ -28,21 +28,21 @@ func (b *Block) PreviousHashToHex() string {
 }
 
 func (b *Block) TransactionsHashToHex() string {
-	return fmt.Sprintf("%x", b.transactionsHash)
+	return b.transactions
 }
 
 func (b *Block) Timestamp() int64 {
 	return b.timestamp
 }
 
-func NewBlock(nonce uint32, previousHash string, transactionsHash string) (*Block, error) {
+func NewBlock(nonce uint32, previousHash string, transactions []string) (*Block, error) {
 
 	return &Block{
-		id:               vo.NewID().Value(),
-		nonce:            nonce,
-		previousHash:     vo.NewHexHashToByte32(previousHash).Value(),
-		transactionsHash: vo.NewHexHashToByte32(transactionsHash).Value(),
-		timestamp:        vo.NewUnixTimeNow().Value(),
+		id:           vo.NewID().Value(),
+		nonce:        nonce,
+		previousHash: vo.NewHexHashToByte32(previousHash).Value(),
+		transactions: vo.NewTransactions(transactions).Value(),
+		timestamp:    vo.NewUnixTimeNow().Value(),
 	}, nil
 }
 
@@ -54,13 +54,13 @@ func (b *Block) Hash() string {
 			Id               uint32   `json:"id"`
 			Nonce            uint32   `json:"nonce"`
 			PreviousHash     [32]byte `json:"previousHash"`
-			TransactionsHash [32]byte `json:"transactionsHash"`
+			TransactionsHash string   `json:"transactionsHash"`
 			Timestamp        int64    `json:"timestamp"`
 		}{
 			Id:               b.id,
 			Nonce:            b.nonce,
 			PreviousHash:     b.previousHash,
-			TransactionsHash: b.transactionsHash,
+			TransactionsHash: b.transactions,
 			Timestamp:        b.timestamp,
 		},
 	)

@@ -79,7 +79,7 @@ func (repo *BlockRepositoryImpl) Create(in *input.CreateBlockInput) ([]*entity.B
 	//またblockがない場合は最初のブロックを作成する
 	if err != nil {
 		in.Nonce = 1
-		b, err := entity.NewBlock(in.Nonce, prevHash, in.TransactionsHash)
+		b, err := entity.NewBlock(in.Nonce, prevHash, []string{""})
 		_, err = db.Conn().Exec(
 			createBlockSql,
 			b.Id(),
@@ -98,7 +98,7 @@ func (repo *BlockRepositoryImpl) Create(in *input.CreateBlockInput) ([]*entity.B
 	}
 
 	//通常のブロック作成処理
-	b, err := entity.NewBlock(in.Nonce, prevHash, entity.TransactionPoolToHash(transactionPool))
+	b, err := entity.NewBlock(in.Nonce, prevHash, transactionPool)
 	if err != nil {
 		return nil, fmt.Errorf(err.Error())
 	}
