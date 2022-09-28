@@ -49,8 +49,8 @@ func NewBlock(nonce uint32, previousHash string, transactionsHash string) (*Bloc
 	return &Block{
 		id:               vo.NewID().Value(),
 		nonce:            nonce,
-		previousHash:     tmp,
-		transactionsHash: vo.NewStringData(transactionsHash).Hash(),
+		previousHash:     vo.NewHexHashToByte32(previousHash).Value(),
+		transactionsHash: vo.NewHexHashToByte32(transactionsHash).Value(),
 		timestamp:        vo.NewUnixTimeNow().Value(),
 	}, nil
 }
