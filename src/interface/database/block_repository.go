@@ -49,13 +49,13 @@ func (repo *BlockRepositoryImpl) Create(in *input.CreateBlockInput) ([]*entity.B
 		return nil, err
 	}
 
+	//dbから取得したtxPoolデータを処理する
 	for txRows.Next() {
-
+		//dbのカラムの型を定義
 		tx := &datamodel.Transaction{}
 		err := txRows.StructScan(tx)
 
 		if err != nil {
-			fmt.Println("エラー文")
 			fmt.Println(err)
 		}
 
@@ -72,15 +72,9 @@ func (repo *BlockRepositoryImpl) Create(in *input.CreateBlockInput) ([]*entity.B
 			return nil, fmt.Errorf(err.Error())
 		}
 
-		log.Println(txInPool.ToJSON())
-
+		//トランザクションプールに入っているtxデータをtransactionPoolに入れる　また入れる際はjsonにして渡す
 		transactionPool = append(transactionPool, txInPool.ToJSON())
 	}
-
-	log.Println("確認したい")
-	log.Println(transactionPool)
-	log.Println(entity.TransactionPoolToHash(transactionPool))
-	log.Println(entity.TransactionPoolToHash(transactionPool))
 
 	//またblockがない場合は最初のブロックを作成する
 	if err != nil {

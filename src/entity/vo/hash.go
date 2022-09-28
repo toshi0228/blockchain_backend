@@ -9,13 +9,18 @@ import (
 type Hash [32]byte
 type HexHash string
 
-// NewHashToHex 文字列をハッシュして16進数  byte(string) => byte32
-func NewHashToHex(byte []byte) Hash {
+// NewHash 文字列をハッシュして16進数  byte(string) => byte32
+func NewHash(byte []byte) Hash {
 	return sha256.Sum256(byte)
 }
 
-// Value 32byteのハッシュ値から16進数をhash値を取得
-func (h Hash) Value() string {
+// Value 32byteのハッシュ値を返す
+func (h Hash) Value() [32]byte {
+	return h
+}
+
+// ValueToHex ハッシュしたデータを16進数に変換
+func (h Hash) ValueToHex() string {
 	return fmt.Sprintf("%x", h)
 }
 

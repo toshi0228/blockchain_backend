@@ -73,6 +73,6 @@ func (tp *TransactionPool) ToJSON() string {
 func TransactionPoolToHash(txPoolJSON []string) string {
 
 	stTxPoolJSON := strings.Join(txPoolJSON, ",")
-	return vo.NewHashToHex([]byte(stTxPoolJSON)).Value()
+	return vo.NewHash([]byte(stTxPoolJSON)).ValueToHex()
 
 }

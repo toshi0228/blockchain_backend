@@ -65,7 +65,7 @@ func (b *Block) Hash() string {
 		},
 	)
 
-	return vo.NewHashToHex(m).Value()
+	return vo.NewHash(m).ValueToHex()
 }
 
 // Print ブロックを見やすいように表示
