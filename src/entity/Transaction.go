@@ -6,7 +6,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/toshi0228/blockchain/src/entity/vo"
-	"log"
 	"time"
 )
 
@@ -85,8 +84,6 @@ func GenWhenCreateTransactions(senderAddress, recipientAddress, senderPrivateKey
 	x.Value = value
 
 	v, _ := json.Marshal(x)
-	log.Println(string(v))
-
 	hash := sha256.Sum256(v)
 	signature := SignatureFromString(signatureHex)
 

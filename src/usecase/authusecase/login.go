@@ -4,7 +4,6 @@ import (
 	"github.com/toshi0228/blockchain/src/entity/vo"
 	"github.com/toshi0228/blockchain/src/usecase/authusecase/input"
 	"github.com/toshi0228/blockchain/src/usecase/authusecase/output"
-	"log"
 )
 
 type Loginusecase struct {
@@ -22,8 +21,6 @@ func (use *Loginusecase) Exec(in *input.LoginInput) (*output.LoginUser, error) {
 	if err != nil {
 		return nil, err
 	}
-
-	log.Println(user)
 
 	key := vo.NewCryptKey()
 
