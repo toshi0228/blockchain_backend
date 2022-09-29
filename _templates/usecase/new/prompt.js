@@ -19,4 +19,9 @@ module.exports = [
         type: 'input',
         name: 'output',
     },
+    {
+        message: "何を行うusecaseなのか説明を入力?  ex) トランザクションを作成する",
+        type: 'input',
+        name: 'desc',
+    },
 ];

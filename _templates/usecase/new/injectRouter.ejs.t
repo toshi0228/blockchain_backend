@@ -4,7 +4,9 @@ unless_exists: true
 inject: true
 after: func
 ---
-
+    //===========================================================
+    //　<%= desc %>
+    //===========================================================
 	//e.POST("/<%=　h.changeCase.lower(entity) %>/<%=　h.changeCase.pascal(useCaseName) %>", func(c echo.Context) error {
 	//
 	//	in := &input.<%= h.changeCase.pascal(useCaseName) %>Input{}

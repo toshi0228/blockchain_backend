@@ -6,7 +6,7 @@ append: dependencies
 ---
 
 //===========================================================
-// <%= h.changeCase.pascal(entity) %> <%=　h.changeCase.pascal(method) %>
+//　<%= desc %>
 //===========================================================
 
 //go:embed <%= h.changeCase.snake(entity) %>_repository_<%= h.changeCase.snake(method) %>.sql

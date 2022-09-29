@@ -22,6 +22,9 @@ func New<%= h.changeCase.pascal(entity) %>Controller(p presenter.I<%= h.changeCa
 	}
 }
 
+//===========================================================
+//　<%= desc %>
+//===========================================================
 func (c *<%= h.changeCase.camel(entity) %>Controller) <%=　h.changeCase.pascal(useCaseName) %>(in *input.<%= h.changeCase.pascal(useCaseName) %>Input) error {
 	usecase := <%= h.changeCase.lower(entity) %>usecase.New<%=　h.changeCase.pascal(useCaseName) %>(c.<%= h.changeCase.camel(entity) %>Repo)
 	out, err := usecase.Exec(in)
