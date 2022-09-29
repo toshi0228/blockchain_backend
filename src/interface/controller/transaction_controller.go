@@ -7,16 +7,34 @@ import (
 )
 
 type transactionController struct {
-    delivery presenter.ITransactionPresenter
+	delivery        presenter.ITransactionPresenter
 	transactionRepo transactionusecase.ITransactionRepository
 }
 
 func NewTransactionController(p presenter.ITransactionPresenter, transactionRepo transactionusecase.ITransactionRepository) *transactionController {
 	return &transactionController{
-	    delivery: p,
+		delivery:        p,
 		transactionRepo: transactionRepo,
 	}
 }
+
+//===========================================================
+//　トランザクションを取得する
+//===========================================================
+
+func (c *transactionController) GetTransactionList(in *input.GetTransactionListInput) error {
+	usecase := transactionusecase.NewGetTransactionList(c.transactionRepo)
+	out, err := usecase.Exec(in)
+	if err != nil {
+		return err
+	}
+
+	return c.delivery.Transactions(out)
+}
+
+//===========================================================
+//　トランザクションを作成する
+//===========================================================
 
 func (c *transactionController) CreateTransaction(in *input.CreateTransactionInput) error {
 	usecase := transactionusecase.NewCreateTransaction(c.transactionRepo)

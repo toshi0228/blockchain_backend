@@ -6,5 +6,7 @@ import (
 )
 
 type ITransactionRepository interface {
+    FindAll(in *input.GetTransactionListInput) ([]*entity.Transaction, error)
+
 	Create(in *input.CreateTransactionInput) (*entity.Transaction, error)
 }

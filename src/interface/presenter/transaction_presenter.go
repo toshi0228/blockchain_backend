@@ -15,9 +15,19 @@ func NewTransactionPresenter(p echo.Context) ITransactionPresenter {
 }
 
 type ITransactionPresenter interface {
+	Transactions(out *output.Transactions) error
+
 	CreateTransaction(out *output.CreateTransaction) error
 }
 
 func (p *transactionPresent) CreateTransaction(out *output.CreateTransaction) error {
+	return p.ctx.JSON(http.StatusOK, out)
+}
+
+//===========================================================
+//　トランザクションを取得する
+//===========================================================
+
+func (p *transactionPresent) Transactions(out *output.Transactions) error {
 	return p.ctx.JSON(http.StatusOK, out)
 }

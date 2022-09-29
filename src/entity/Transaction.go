@@ -45,8 +45,8 @@ func (t *Transaction) UpdatedAt() vo.UpdatedAt {
 	return t.updatedAt
 }
 
-func NewTransaction() *Transaction {
-	return &Transaction{}
+func NewTransaction() (*Transaction, error) {
+	return &Transaction{}, nil
 }
 
 // GenWhenCreateTransactions トランザクションの新規登録の作成

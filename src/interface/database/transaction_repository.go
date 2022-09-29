@@ -4,6 +4,7 @@ import (
 	_ "embed"
 	"fmt"
 	"github.com/toshi0228/blockchain/src/entity"
+	"github.com/toshi0228/blockchain/src/infra/datamodel"
 	"github.com/toshi0228/blockchain/src/infra/db"
 	"github.com/toshi0228/blockchain/src/usecase/transactionusecase/input"
 	"log"
@@ -16,7 +17,39 @@ func NewTransactionRepositoryImpl() *TransactionRepositoryImpl {
 }
 
 //===========================================================
-// Transaction Create
+//　トランザクションを取得する
+//===========================================================
+
+//go:embed transaction_repository_find_all.sql
+var findAllTransactionSql string
+
+func (repo *TransactionRepositoryImpl) FindAll(in *input.GetTransactionListInput) ([]*entity.Transaction, error) {
+
+	_, err := entity.NewTransaction()
+
+	if err != nil {
+		return nil, fmt.Errorf(err.Error())
+	}
+
+	//cmd := fmt.Sprintf(findAllTransactionSql, ***)
+
+	var transactions []*datamodel.Transaction
+
+	err = db.Conn().Select(&transactions, findAllTransactionSql)
+	if err != nil {
+		return nil, err
+	}
+
+	for i, v := range transactions {
+
+		fmt.Println(i, v)
+	}
+
+	return nil, nil
+}
+
+//===========================================================
+// トランザクションを作成する
 //===========================================================
 
 //go:embed transaction_repository_create.sql
