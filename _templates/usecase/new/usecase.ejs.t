@@ -22,6 +22,7 @@ func New<%=　h.changeCase.pascal(useCaseName) %>(<%= h.changeCase.camel(entity)
 //===========================================================
 //　<%= desc %>
 //===========================================================
+
 func (use *<%=　h.changeCase.pascal(useCaseName) %>usecase) Exec(in *input.<%= h.changeCase.pascal(useCaseName) %>Input) (*output.<%= h.changeCase.pascal(output) %>, error) {
 	_, err := use.<%= h.changeCase.camel(entity) %>Repository.<%=　h.changeCase.pascal(method) %>(in)
 	if err != nil {
