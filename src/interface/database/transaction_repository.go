@@ -25,7 +25,7 @@ var createTransactionSql string
 //go:embed transaction_repository_create_pool.sql
 var createTransactionPooLSql string
 
-func (repo *TransactionRepositoryImpl) Create(in *input.CreateTransactionInput) (*entity.Transactions, error) {
+func (repo *TransactionRepositoryImpl) Create(in *input.CreateTransactionInput) (*entity.Transaction, error) {
 
 	tx, err := entity.GenWhenCreateTransactions(in.SenderAddress, in.RecipientAddress, in.PrivateKey, in.PublicKey, in.Signature, in.Amount)
 

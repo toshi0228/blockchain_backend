@@ -7,10 +7,9 @@ import (
 	"fmt"
 	"github.com/toshi0228/blockchain/src/entity/vo"
 	"log"
-	"strings"
 )
 
-type Transactions struct {
+type Transaction struct {
 	id               vo.ID `json:"id"`
 	senderAddress    string
 	recipientAddress string
@@ -22,49 +21,36 @@ type Transactions struct {
 	updatedAt        vo.UpdatedAt `json:"updatedAt"`
 }
 
-func (t *Transactions) Id() vo.ID {
+func (t *Transaction) Id() vo.ID {
 	return t.id
 }
 
-func (t *Transactions) SenderAddress() string {
+func (t *Transaction) SenderAddress() string {
 	return t.senderAddress
 }
 
-func (t *Transactions) RecipientAddress() string {
+func (t *Transaction) RecipientAddress() string {
 	return t.recipientAddress
 }
 
-func (t *Transactions) Value() uint64 {
+func (t *Transaction) Value() uint64 {
 	return t.value
 }
 
-func (t *Transactions) CreatedAt() vo.CreatedAt {
+func (t *Transaction) CreatedAt() vo.CreatedAt {
 	return t.createdAt
 }
 
-func (t *Transactions) UpdatedAt() vo.UpdatedAt {
+func (t *Transaction) UpdatedAt() vo.UpdatedAt {
 	return t.updatedAt
 }
 
-// NewTransactions トランザクションの作成
-func NewTransactions(senderAddress string, recipientAddress string, value uint64) *Transaction {
-
-	return &Transaction{
-		senderAddress:    senderAddress,
-		recipientAddress: recipientAddress,
-		value:            value,
-	}
-}
-
-func (t *Transactions) Print() {
-	fmt.Printf("%s \n", strings.Repeat("-", 40))
-	fmt.Printf("送信者 : %s\n", t.senderAddress)
-	fmt.Printf("受取人 : %s\n", t.recipientAddress)
-	fmt.Printf("金額 : %v\n", t.value)
+func NewTransaction() *Transaction {
+	return &Transaction{}
 }
 
 // GenWhenCreateTransactions トランザクションの新規登録の作成
-func GenWhenCreateTransactions(senderAddress, recipientAddress, senderPrivateKeyHex, senderPublicKeyHex, signatureHex string, value uint64) (*Transactions, error) {
+func GenWhenCreateTransactions(senderAddress, recipientAddress, senderPrivateKeyHex, senderPublicKeyHex, signatureHex string, value uint64) (*Transaction, error) {
 
 	publicKey := vo.PublicKeyFromString(senderPublicKeyHex)
 
@@ -95,7 +81,7 @@ func GenWhenCreateTransactions(senderAddress, recipientAddress, senderPrivateKey
 	valid := ecdsa.Verify(publicKey, hash[:], signature.R, signature.S)
 	fmt.Println("signature verified:", valid)
 
-	return &Transactions{
+	return &Transaction{
 		id:               vo.NewID(),
 		senderAddress:    senderAddress,
 		recipientAddress: recipientAddress,
@@ -107,15 +93,3 @@ func GenWhenCreateTransactions(senderAddress, recipientAddress, senderPrivateKey
 		updatedAt:        vo.NewUpdatedAt(),
 	}, nil
 }
-
-//func (t *Transaction) MarshalJSON() ([]byte, error) {
-//	return json.Marshal(struct {
-//		Sender    string `json:"senderBlockChainAddress"`
-//		Recipient string `json:"recipientBlockChainAddress"`
-//		Value     uint64 `json:"value"`
-//	}{
-//		Sender:    t.senderAddress,
-//		Recipient: t.recipientAddress,
-//		Value:     t.value,
-//	})
-//}
