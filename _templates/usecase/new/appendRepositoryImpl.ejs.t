@@ -14,7 +14,7 @@ var <%= h.changeCase.camel(method) %><%= h.changeCase.pascal(entity) %>Sql strin
 
 func (repo *<%= h.changeCase.pascal(entity) %>RepositoryImpl) <%=h.changeCase.pascal(method) %>(in *input.<%= h.changeCase.pascal(useCaseName) %>Input) ([]*entity.<%= h.changeCase.pascal(entity) %>, error) {
 
-	//_, err := entity.New<%=h.changeCase.pascal(method) %>>(in.Name)
+	//_, err := entity.New<%= h.changeCase.pascal(entity) %>(in.Name)
 	//if err != nil {
 	//	return nil, fmt.Errorf(err.Error())
 	//}

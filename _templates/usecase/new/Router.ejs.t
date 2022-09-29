@@ -16,13 +16,12 @@ func New<%= h.changeCase.pascal(entity) %>Router(e *echo.Echo) {
     //===========================================================
     //　<%= desc %>
     //===========================================================
-
 	//e.POST("/<%=　h.changeCase.lower(entity) %>/<%=　h.changeCase.pascal(useCaseName) %>", func(c echo.Context) error {
 	//
 	//	in := &input.<%= h.changeCase.pascal(useCaseName) %>Input{}
 	//	err := c.Bind(in)
 	//	if err != nil {
-	//		return fmt.Errorf("エラー")
+	//		return err
 	//	}
 	//
 	//	<%= h.changeCase.camel(entity) %>RepoImpl := database.New<%= h.changeCase.pascal(entity) %>RepositoryImpl()
