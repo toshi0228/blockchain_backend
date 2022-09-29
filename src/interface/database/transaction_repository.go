@@ -25,27 +25,27 @@ var findAllTransactionSql string
 
 func (repo *TransactionRepositoryImpl) FindAll(in *input.GetTransactionListInput) ([]*entity.Transaction, error) {
 
-	_, err := entity.NewTransaction()
-
-	if err != nil {
-		return nil, fmt.Errorf(err.Error())
-	}
-
-	//cmd := fmt.Sprintf(findAllTransactionSql, ***)
-
+	//DBからトランザクションの取得
 	var transactions []*datamodel.Transaction
-
-	err = db.Conn().Select(&transactions, findAllTransactionSql)
+	err := db.Conn().Select(&transactions, findAllTransactionSql)
 	if err != nil {
 		return nil, err
 	}
 
-	for i, v := range transactions {
+	// DBから取得したトランザクションをentityに代入
+	var entityTxs []*entity.Transaction
+	for i, tx := range transactions {
+		fmt.Println(i, tx)
 
-		fmt.Println(i, v)
+		tx, err := entity.NewTransaction(tx.Id, tx.SenderAddress, tx.RecipientAddress, tx.Amount, tx.CreatedAt, tx.UpdatedAt)
+		if err != nil {
+			return nil, err
+		}
+
+		entityTxs = append(entityTxs, tx)
 	}
 
-	return nil, nil
+	return entityTxs, nil
 }
 
 //===========================================================

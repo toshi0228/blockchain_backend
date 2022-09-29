@@ -20,10 +20,23 @@ func NewGetTransactionList(transactionRepo ITransactionRepository) *GetTransacti
 //===========================================================
 
 func (use *GetTransactionListusecase) Exec(in *input.GetTransactionListInput) (*output.Transactions, error) {
-	_, err := use.transactionRepository.FindAll(in)
+	txs, err := use.transactionRepository.FindAll(in)
 	if err != nil {
 		return nil, err
 	}
 
-	return &output.Transactions{}, nil
+	outTxs := make([]*output.Transaction, len(txs))
+	for i, tx := range txs {
+
+		outTxs[i] = &output.Transaction{
+			Id:               tx.Id().Value(),
+			SenderAddress:    tx.SenderAddress(),
+			RecipientAddress: tx.RecipientAddress(),
+			Amount:           tx.Value(),
+			CreatedAt:        tx.CreatedAt().Value(),
+			UpdatedAt:        tx.UpdatedAt().Value(),
+		}
+	}
+
+	return &output.Transactions{TransactionList: outTxs}, nil
 }

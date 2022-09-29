@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"github.com/toshi0228/blockchain/src/entity/vo"
 	"log"
+	"time"
 )
 
 type Transaction struct {
@@ -45,8 +46,23 @@ func (t *Transaction) UpdatedAt() vo.UpdatedAt {
 	return t.updatedAt
 }
 
-func NewTransaction() (*Transaction, error) {
-	return &Transaction{}, nil
+func NewTransaction(
+	id uint32,
+	senderAddress string,
+	recipientAddress string,
+	amount uint64,
+	createdAt time.Time,
+	updatedAt time.Time,
+) (*Transaction, error) {
+
+	return &Transaction{
+		id:               vo.ID(id),
+		senderAddress:    senderAddress,
+		recipientAddress: recipientAddress,
+		value:            amount,
+		createdAt:        vo.CreatedAt(createdAt),
+		updatedAt:        vo.UpdatedAt(updatedAt),
+	}, nil
 }
 
 // GenWhenCreateTransactions トランザクションの新規登録の作成
@@ -80,6 +96,10 @@ func GenWhenCreateTransactions(senderAddress, recipientAddress, senderPrivateKey
 	//改竄されていないか検証
 	valid := ecdsa.Verify(publicKey, hash[:], signature.R, signature.S)
 	fmt.Println("signature verified:", valid)
+
+	if !valid {
+		return nil, fmt.Errorf("改竄されています")
+	}
 
 	return &Transaction{
 		id:               vo.NewID(),
