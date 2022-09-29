@@ -9,7 +9,7 @@ import (
 type Hash [32]byte
 type HexHash string
 
-// NewHash 文字列をハッシュして16進数  byte(string) => byte32
+// NewHash []byteをハッシュして, [32]byteにする
 func NewHash(byte []byte) Hash {
 	return sha256.Sum256(byte)
 }
@@ -19,7 +19,7 @@ func (h Hash) Value() [32]byte {
 	return h
 }
 
-// ValueToHex ハッシュしたデータを16進数に変換
+// ValueToHex [32]byteのハッシュしたデータを16進数に変換
 func (h Hash) ValueToHex() string {
 	return fmt.Sprintf("%x", h)
 }
