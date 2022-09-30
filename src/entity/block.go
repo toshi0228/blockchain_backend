@@ -37,7 +37,24 @@ func (b *Block) Timestamp() int64 {
 	return b.timestamp
 }
 
+//===========================================================
+//　プリミティブなBlockのEntityを作成
+//===========================================================
+
 func NewBlock(previousHash string, transactions []string) (*Block, error) {
+	b := &Block{}
+
+	b.id = vo.NewID().Value()
+	b.previousHash = vo.NewHexHashToByte32(previousHash).Value()
+	b.transactions = vo.NewTransactions(transactions).Value()
+	b.timestamp = vo.NewUnixTimeNow().Value()
+	b.nonce = b.ProofOfWork() // この値は一番下に書かないといけない。他のBlockのstructの値を使ってProofOfWorkを行うため
+
+	return b, nil
+}
+
+// GenWhenCreateBlock 新しいBlockを作成する時に使用
+func GenWhenCreateBlock(previousHash string, transactions []string) (*Block, error) {
 	b := &Block{}
 
 	b.id = vo.NewID().Value()
