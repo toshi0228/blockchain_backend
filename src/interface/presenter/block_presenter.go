@@ -15,9 +15,21 @@ func NewBlockPresenter(p echo.Context) IBlockPresenter {
 }
 
 type IBlockPresenter interface {
+	BlockList(out *output.BlockList) error
+
+
+
 	CreateBlock(out *output.CreateBlock) error
 }
 
 func (p *blockPresent) CreateBlock(out *output.CreateBlock) error {
 	return p.ctx.JSON(http.StatusOK, out)
 }
+//===========================================================
+//　ブロックリスト(ブロックチェーン)を取得する
+//===========================================================
+
+func (p *blockPresent) BlockList(out *output.BlockList) error {
+	return p.ctx.JSON(http.StatusOK, out)
+}
+

@@ -11,6 +11,25 @@ import (
 )
 
 func NewBlockRouter(e *echo.Echo) {
+	//===========================================================
+	//　ブロックリスト(ブロックチェーン)を取得する
+	//===========================================================
+	e.GET("/block", func(c echo.Context) error {
+
+		in := &input.GetBlockListInput{}
+		err := c.Bind(in)
+		if err != nil {
+			return err
+		}
+
+		blockRepoImpl := database.NewBlockRepositoryImpl()
+		err = controller.NewBlockController(presenter.NewBlockPresenter(c), blockRepoImpl).GetBlockList(in)
+		if err != nil {
+			return c.JSON(http.StatusInternalServerError, err.Error())
+		}
+
+		return nil
+	})
 
 	e.POST("/block", func(c echo.Context) error {
 

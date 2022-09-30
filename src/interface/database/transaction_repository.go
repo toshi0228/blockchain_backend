@@ -34,8 +34,7 @@ func (repo *TransactionRepositoryImpl) FindAll(in *input.GetTransactionListInput
 
 	// DBから取得したトランザクションをentityに代入
 	var entityTxs []*entity.Transaction
-	for i, tx := range transactions {
-		fmt.Println(i, tx)
+	for _, tx := range transactions {
 
 		tx, err := entity.NewTransaction(tx.Id, tx.SenderAddress, tx.RecipientAddress, tx.Amount, tx.CreatedAt, tx.UpdatedAt)
 		if err != nil {

@@ -27,3 +27,17 @@ func (c *blockController) CreateBlock(in *input.CreateBlockInput) error {
 
 	return c.delivery.CreateBlock(out)
 }
+//===========================================================
+//　ブロックリスト(ブロックチェーン)を取得する
+//===========================================================
+
+func (c *blockController) GetBlockList(in *input.GetBlockListInput) error {
+	usecase := blockusecase.NewGetBlockList(c.blockRepo)
+	out, err := usecase.Exec(in)
+	if err != nil {
+		return err
+	}
+
+	return c.delivery.BlockList(out)
+}
+

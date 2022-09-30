@@ -130,3 +130,36 @@ func (repo *BlockRepositoryImpl) Create(in *input.CreateBlockInput) ([]*entity.B
 
 	return nil, nil
 }
+
+//===========================================================
+//　ブロックリスト(ブロックチェーン)を取得する
+//===========================================================
+
+//go:embed block_repository_find_all.sql
+var findAllBlockSql string
+
+func (repo *BlockRepositoryImpl) FindAll(in *input.GetBlockListInput) ([]*entity.Block, error) {
+
+	//_, err := entity.NewBlock(in.Name)
+	//if err != nil {
+	//	return nil, fmt.Errorf(err.Error())
+	//}
+
+	//cmd := fmt.Sprintf(findAllBlockSql, ***)
+
+	var blockChain []*datamodel.BlocK
+	err := db.Conn().Select(&blockChain, findAllBlockSql)
+	if err != nil {
+		return nil, err
+	}
+
+	//var entityBC *entity.Block
+	//
+	//for _, bc := range blockChain {
+	//	entity.NewBlock()
+	//	//b := en
+	//}
+	//
+
+	return nil, nil
+}

@@ -6,6 +6,8 @@ import (
 )
 
 type IBlockRepository interface {
+    FindAll(in *input.GetBlockListInput) ([]*entity.Block, error)
+
 	Create(in *input.CreateBlockInput) ([]*entity.Block, error)
 }
 
