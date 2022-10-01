@@ -14,6 +14,7 @@ type Block struct {
 	previousHash [32]byte
 	transactions string
 	timestamp    int64
+	hash         [32]byte // hash値以外の Blockの値をhashした結果
 }
 
 func (b *Block) Id() uint32 {
@@ -24,12 +25,12 @@ func (b *Block) Nonce() uint32 {
 	return b.nonce
 }
 
-func (b *Block) PreviousHashToHex() string {
+func (b *Block) PreviousHash() string {
 
 	return fmt.Sprintf("%x", b.previousHash)
 }
 
-func (b *Block) TransactionsHashToHex() string {
+func (b *Block) Transactions() string {
 	return b.transactions
 }
 
@@ -41,19 +42,23 @@ func (b *Block) Timestamp() int64 {
 //　プリミティブなBlockのEntityを作成
 //===========================================================
 
-func NewBlock(previousHash string, transactions []string) (*Block, error) {
-	b := &Block{}
+func NewBlock(id, nonce uint32, hash, previousHash, transactions string, timestamp int64) (*Block, error) {
 
-	b.id = vo.NewID().Value()
-	b.previousHash = vo.NewHexHashToByte32(previousHash).Value()
-	b.transactions = vo.NewTransactions(transactions).Value()
-	b.timestamp = vo.NewUnixTimeNow().Value()
-	b.nonce = b.ProofOfWork() // この値は一番下に書かないといけない。他のBlockのstructの値を使ってProofOfWorkを行うため
+	return &Block{
+		id:           id,
+		previousHash: vo.NewHexHashToByte32(previousHash).Value(),
+		transactions: transactions,
+		timestamp:    timestamp,
+		nonce:        nonce,
+		hash:         vo.NewHexHashToByte32(previousHash).Value(),
+	}, nil
 
-	return b, nil
 }
 
+//===========================================================
 // GenWhenCreateBlock 新しいBlockを作成する時に使用
+//===========================================================
+
 func GenWhenCreateBlock(previousHash string, transactions []string) (*Block, error) {
 	b := &Block{}
 

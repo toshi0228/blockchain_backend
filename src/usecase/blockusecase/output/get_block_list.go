@@ -1,10 +1,14 @@
 package output
 
-import "time"
-
 type BlockList struct {
-	ID uint32 `json:"id"`
+	BlockChain []*Block `json:"blockChain"`
+}
 
-	CreatedAt time.Time `json:"createdAt"`
-	UpdatedAt time.Time `json:"updatedAt"`
+type Block struct {
+	ID           uint32 `json:"id"`
+	Nonce        uint32 `json:"nonce"`
+	Transactions string `json:"transactions"`
+	PreviousHash string `json:"previousHash"`
+	Timestamp    int64  `json:"timestamp"`
+	Hash         string `json:"hash"`
 }

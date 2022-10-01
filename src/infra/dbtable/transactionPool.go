@@ -10,7 +10,7 @@ const TableNameTransactionPool = "transactionPool"
 //go:embed transactionPool.sql
 var transactionPoolTableSql string
 
-func TransactionPools() string {
+func TransactionPool() string {
 
 	cmd := fmt.Sprintf(transactionPoolTableSql, TableNameTransactionPool)
 	return cmd

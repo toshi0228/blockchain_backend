@@ -67,7 +67,7 @@ func NewWallet(userID uint32) (*Wallet, error) {
 	w.updatedAt = vo.NewUpdatedAt()
 
 	// 秘密鍵からECDSAで公開鍵を生成
-	privateKey, _ := ecdsa.GenerateKey(elliptic.P256(), rand.Reader)
+	privateKey, _ := ecdsa.GenerateKey(elliptic.P256(), rand.Reader) // この秘密鍵が外にでてはいけいもの　このwalletを操作できる鍵
 	w.privateKey = privateKey
 	w.publicKey = &w.privateKey.PublicKey
 

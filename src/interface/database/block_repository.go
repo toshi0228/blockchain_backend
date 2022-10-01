@@ -17,7 +17,7 @@ func NewBlockRepositoryImpl() *BlockRepositoryImpl {
 }
 
 //===========================================================
-// Block Create
+// ブロックの作成
 //===========================================================
 
 //ブロック作成のSQL
@@ -86,8 +86,8 @@ func (repo *BlockRepositoryImpl) Create(in *input.CreateBlockInput) ([]*entity.B
 			createBlockSql,
 			b.Id(),
 			b.Nonce(),
-			b.PreviousHashToHex(),
-			b.TransactionsHashToHex(),
+			b.PreviousHash(),
+			b.Transactions(),
 			b.Timestamp(),
 			b.Hash(),
 		)
@@ -109,8 +109,8 @@ func (repo *BlockRepositoryImpl) Create(in *input.CreateBlockInput) ([]*entity.B
 		createBlockSql,
 		b.Id(),
 		b.Nonce(),
-		b.PreviousHashToHex(),
-		b.TransactionsHashToHex(),
+		b.PreviousHash(),
+		b.Transactions(),
 		b.Timestamp(),
 		b.Hash(),
 	)
@@ -140,26 +140,22 @@ var findAllBlockSql string
 
 func (repo *BlockRepositoryImpl) FindAll(in *input.GetBlockListInput) ([]*entity.Block, error) {
 
-	//_, err := entity.NewBlock(in.Name)
-	//if err != nil {
-	//	return nil, fmt.Errorf(err.Error())
-	//}
-
-	//cmd := fmt.Sprintf(findAllBlockSql, ***)
-
+	//DBからブロックのリストを取得する
 	var blockChain []*datamodel.BlocK
 	err := db.Conn().Select(&blockChain, findAllBlockSql)
 	if err != nil {
 		return nil, err
 	}
 
-	//var entityBC *entity.Block
-	//
-	//for _, bc := range blockChain {
-	//	entity.NewBlock()
-	//	//b := en
-	//}
-	//
+	// DBから取得したentity
+	var entityBC []*entity.Block
+	for _, b := range blockChain {
+		blockEntity, err := entity.NewBlock(b.Id, b.Nonce, b.PreviousHash, b.Hash, b.Transactions, b.Timestamp)
+		if err != nil {
+			return nil, err
+		}
+		entityBC = append(entityBC, blockEntity)
+	}
 
-	return nil, nil
+	return entityBC, nil
 }
