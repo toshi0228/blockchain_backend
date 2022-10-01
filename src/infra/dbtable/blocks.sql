@@ -1,6 +1,6 @@
 CREATE TABLE IF NOT EXISTS %s
 (
-    id CHAR(32) NOT NULL,
+    id BIGINT UNSIGNED AUTO_INCREMENT,
     nonce INT UNSIGNED,
     previous_hash VARCHAR(255),
     transactions LONGTEXT,

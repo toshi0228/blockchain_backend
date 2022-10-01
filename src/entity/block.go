@@ -30,6 +30,11 @@ func (b *Block) PreviousHash() string {
 	return fmt.Sprintf("%x", b.previousHash)
 }
 
+func (b *Block) Hash() string {
+
+	return fmt.Sprintf("%x", b.hash)
+}
+
 func (b *Block) Transactions() string {
 	return b.transactions
 }
@@ -45,12 +50,12 @@ func (b *Block) Timestamp() int64 {
 func NewBlock(id, nonce uint32, hash, previousHash, transactions string, timestamp int64) (*Block, error) {
 
 	return &Block{
-		id:           id,
+		id:           vo.ID(id).Value(),
 		previousHash: vo.NewHexHashToByte32(previousHash).Value(),
 		transactions: transactions,
 		timestamp:    timestamp,
 		nonce:        nonce,
-		hash:         vo.NewHexHashToByte32(previousHash).Value(),
+		hash:         vo.NewHexHashToByte32(hash).Value(),
 	}, nil
 
 }
@@ -62,7 +67,6 @@ func NewBlock(id, nonce uint32, hash, previousHash, transactions string, timesta
 func GenWhenCreateBlock(previousHash string, transactions []string) (*Block, error) {
 	b := &Block{}
 
-	b.id = vo.NewID().Value()
 	b.previousHash = vo.NewHexHashToByte32(previousHash).Value()
 	b.transactions = vo.NewTransactions(transactions).Value()
 	b.timestamp = vo.NewUnixTimeNow().Value()
@@ -74,7 +78,7 @@ func GenWhenCreateBlock(previousHash string, transactions []string) (*Block, err
 // ProofOfWork ナンスを導き出す
 func (b *Block) ProofOfWork() uint32 {
 
-	miningDifficulty := uint32(4) // ハッシュ値が 000になるまで計算
+	miningDifficulty := uint32(3) // ハッシュ値が 000になるまで計算
 	b.nonce = uint32(0)
 
 	for !b.ValidProof(miningDifficulty) {
@@ -87,24 +91,22 @@ func (b *Block) ProofOfWork() uint32 {
 func (b *Block) ValidProof(difficulty uint32) bool {
 	zeros := strings.Repeat("0", int(difficulty))
 
-	guessHashStr := b.Hash()
+	guessHashStr := b.CalcHash()
 	log.Printf("%v : %v", b.nonce, guessHashStr)
 
 	return guessHashStr[:difficulty] == zeros
 }
 
-// Hash ブロックのハッシュ値を求める
-func (b *Block) Hash() string {
+// CalcHash ブロックのハッシュ値を求める
+func (b *Block) CalcHash() string {
 
 	m, _ := json.Marshal(
 		struct {
-			Id           uint32   `json:"id"`
 			Nonce        uint32   `json:"nonce"`
 			PreviousHash [32]byte `json:"previousHash"`
 			Transactions string   `json:"transactions"`
 			Timestamp    int64    `json:"timestamp"`
 		}{
-			Id:           b.id,
 			Nonce:        b.nonce,
 			PreviousHash: b.previousHash,
 			Transactions: b.transactions,

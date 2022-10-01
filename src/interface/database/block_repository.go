@@ -84,12 +84,11 @@ func (repo *BlockRepositoryImpl) Create(in *input.CreateBlockInput) ([]*entity.B
 		b, err := entity.GenWhenCreateBlock(prevHash, []string{""})
 		_, err = db.Conn().Exec(
 			createBlockSql,
-			b.Id(),
 			b.Nonce(),
 			b.PreviousHash(),
 			b.Transactions(),
 			b.Timestamp(),
-			b.Hash(),
+			b.CalcHash(),
 		)
 
 		if err != nil {
@@ -107,12 +106,11 @@ func (repo *BlockRepositoryImpl) Create(in *input.CreateBlockInput) ([]*entity.B
 
 	_, err = db.Conn().Exec(
 		createBlockSql,
-		b.Id(),
 		b.Nonce(),
 		b.PreviousHash(),
 		b.Transactions(),
 		b.Timestamp(),
-		b.Hash(),
+		b.CalcHash(),
 	)
 
 	if err != nil {
@@ -150,7 +148,7 @@ func (repo *BlockRepositoryImpl) FindAll(in *input.GetBlockListInput) ([]*entity
 	// DBから取得したentity
 	var entityBC []*entity.Block
 	for _, b := range blockChain {
-		blockEntity, err := entity.NewBlock(b.Id, b.Nonce, b.PreviousHash, b.Hash, b.Transactions, b.Timestamp)
+		blockEntity, err := entity.NewBlock(b.Id, b.Nonce, b.Hash, b.PreviousHash, b.Transactions, b.Timestamp)
 		if err != nil {
 			return nil, err
 		}
