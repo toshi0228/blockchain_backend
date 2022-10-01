@@ -31,6 +31,9 @@ func NewBlockRouter(e *echo.Echo) {
 		return nil
 	})
 
+	//===========================================================
+	//　ブロックの作成
+	//===========================================================
 	e.POST("/block", func(c echo.Context) error {
 
 		in := &input.CreateBlockInput{}
@@ -48,5 +51,24 @@ func NewBlockRouter(e *echo.Echo) {
 		return nil
 	})
 
-}
+	//===========================================================
+	//　ブロックが改竄されてないか検証
+	//===========================================================
+	e.GET("/block/verify", func(c echo.Context) error {
 
+		in := &input.VerifyBlockInput{}
+		err := c.Bind(in)
+		if err != nil {
+			return err
+		}
+
+		blockRepoImpl := database.NewBlockRepositoryImpl()
+		err = controller.NewBlockController(presenter.NewBlockPresenter(c), blockRepoImpl).VerifyBlock(in)
+		if err != nil {
+			return c.JSON(http.StatusInternalServerError, err.Error())
+		}
+
+		return nil
+	})
+
+}

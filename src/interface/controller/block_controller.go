@@ -41,3 +41,17 @@ func (c *blockController) GetBlockList(in *input.GetBlockListInput) error {
 	return c.delivery.BlockList(out)
 }
 
+//===========================================================
+//　ブロックが改竄されてないか検証
+//===========================================================
+
+func (c *blockController) VerifyBlock(in *input.VerifyBlockInput) error {
+	usecase := blockusecase.NewVerifyBlock(c.blockRepo)
+	out, err := usecase.Exec(in)
+	if err != nil {
+		return err
+	}
+
+	return c.delivery.VerifyBlockList(out)
+}
+

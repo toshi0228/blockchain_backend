@@ -157,3 +157,32 @@ func (repo *BlockRepositoryImpl) FindAll(in *input.GetBlockListInput) ([]*entity
 
 	return entityBC, nil
 }
+
+//===========================================================
+//　ブロックが改竄されてないか検証
+//===========================================================
+
+//go:embed block_repository_verify_block_find_all.sql
+var verifyBlockFindAllBlockSql string
+
+func (repo *BlockRepositoryImpl) VerifyBlockFindAll(in *input.VerifyBlockInput) ([]*entity.Block, error) {
+
+	//DBからブロックのリストを取得する
+	var blockChain []*datamodel.BlocK
+	err := db.Conn().Select(&blockChain, findAllBlockSql)
+	if err != nil {
+		return nil, err
+	}
+
+	// DBから取得したentity
+	var entityBC []*entity.Block
+	for _, b := range blockChain {
+		blockEntity, err := entity.NewBlock(b.Id, b.Nonce, b.Hash, b.PreviousHash, b.Transactions, b.Timestamp)
+		if err != nil {
+			return nil, err
+		}
+		entityBC = append(entityBC, blockEntity)
+	}
+
+	return entityBC, nil
+}

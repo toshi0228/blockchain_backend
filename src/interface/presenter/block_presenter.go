@@ -15,6 +15,10 @@ func NewBlockPresenter(p echo.Context) IBlockPresenter {
 }
 
 type IBlockPresenter interface {
+	VerifyBlockList(out *output.VerifyBlockList) error
+
+
+
 	BlockList(out *output.BlockList) error
 
 
@@ -30,6 +34,14 @@ func (p *blockPresent) CreateBlock(out *output.CreateBlock) error {
 //===========================================================
 
 func (p *blockPresent) BlockList(out *output.BlockList) error {
+	return p.ctx.JSON(http.StatusOK, out)
+}
+
+//===========================================================
+//　ブロックが改竄されてないか検証
+//===========================================================
+
+func (p *blockPresent) VerifyBlockList(out *output.VerifyBlockList) error {
 	return p.ctx.JSON(http.StatusOK, out)
 }
 

@@ -116,3 +116,14 @@ func (b *Block) CalcHash() string {
 
 	return vo.NewHash(m).ValueToHex()
 }
+
+// IsCleanData 改竄されているか検証
+func (b *Block) IsCleanData() bool {
+
+	// DBに保存してあるハッシュ値とDBにあるBlockのデータをハッシュ値を計算して同じ値になるか検証
+	if b.Hash() != b.CalcHash() {
+		log.Println("改竄されている")
+		return false
+	}
+	return true
+}
