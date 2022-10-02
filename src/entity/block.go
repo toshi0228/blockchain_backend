@@ -78,7 +78,7 @@ func GenWhenCreateBlock(previousHash string, transactions []string) (*Block, err
 // ProofOfWork ナンスを導き出す
 func (b *Block) ProofOfWork() uint32 {
 
-	miningDifficulty := uint32(3) // ハッシュ値が 000になるまで計算
+	miningDifficulty := uint32(4) // ハッシュ値が 000になるまで計算
 	b.nonce = uint32(0)
 
 	for !b.ValidProof(miningDifficulty) {
@@ -123,6 +123,7 @@ func (b *Block) IsCleanData() bool {
 	// DBに保存してあるハッシュ値とDBにあるBlockのデータをハッシュ値を計算して同じ値になるか検証
 	if b.Hash() != b.CalcHash() {
 		log.Println("改竄されている")
+		log.Printf(b.CalcHash())
 		return false
 	}
 	return true

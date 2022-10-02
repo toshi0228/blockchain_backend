@@ -11,9 +11,9 @@ type SignUpusecase struct {
 	walletRepository IWalletRepository
 }
 
-func NewSignUp(AuthRepo IAuthRepository, walletRepo IWalletRepository) *SignUpusecase {
+func NewSignUp(authRepo IAuthRepository, walletRepo IWalletRepository) *SignUpusecase {
 	return &SignUpusecase{
-		authRepository:   AuthRepo,
+		authRepository:   authRepo,
 		walletRepository: walletRepo,
 	}
 }

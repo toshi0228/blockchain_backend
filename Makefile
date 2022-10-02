@@ -1,4 +1,4 @@
-.PHONY: version ps desc build up down build_up in deploy start
+.PHONY: version ps desc build up down build_up in deploy start test
 
 APP_VERSION=${shell git rev-parse --short HEAD}
 
@@ -47,3 +47,6 @@ start:
 
 go_build:
 	go build ./src/cmd/main.go
+
+test:
+	go test -v -cover  ./src/usecase/... | grep -v -e "input" -e "output"
