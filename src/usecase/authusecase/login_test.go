@@ -1,93 +1,53 @@
 package authusecase_test
 
 import (
-	"github.com/toshi0228/blockchain/src/interface/database"
-	"github.com/toshi0228/blockchain/src/test"
+	"github.com/golang/mock/gomock"
+	"github.com/toshi0228/blockchain/src/entity"
+	"github.com/toshi0228/blockchain/src/mock/mock_authusecase"
 	"github.com/toshi0228/blockchain/src/usecase/authusecase"
 	"github.com/toshi0228/blockchain/src/usecase/authusecase/input"
-	"reflect"
 	"testing"
+	"time"
+)
+
+var (
+	loginInput = input.LoginInput{Name: "test1", Password: "test1"}
+	user1, _   = entity.NewUserPager(424262867, loginInput.Name, loginInput.Password, time.Now(), time.Now(),
+		1, 1, "123", time.Now(), time.Now())
 )
 
 func TestLoginusecase_Exec(t *testing.T) {
 
 	//テスト用の便利関数
-	ttt := test.NewTestLib(t)
+	//ttt := test.NewTestLib(t)
 
 	//DBの初期化
-	err := ttt.DBInit()
-	if err != nil {
-		ttt.NG(err)
-	}
+	//err := ttt.DBInit()
+	//if err != nil {
+	//	ttt.NG(err)
+	//}
+
+	//　モックの呼び出しを管理するControllerを生成する
+	ctrl := gomock.NewController(t)
+	defer ctrl.Finish()
 
 	// 必要なrepository
-	authRepo := database.NewAuthRepositoryImpl()
+	authRepo := mock_authusecase.NewMockIAuthRepository(ctrl)
+	// テスト中に呼ばれるべき関数と返り値を指定
+	authRepo.EXPECT().Login(&loginInput).Return(user1, nil)
 
 	//case : ユーザーの新規登録を行う
 	usecase := authusecase.NewLogin(authRepo)
+	out, err := usecase.Exec(&loginInput)
 
-	tests := []struct {
-		name  string
-		input *input.LoginInput
-		want  string
-	}{
-		{
-			name:  "初めてのテスト1",
-			input: &input.LoginInput{Name: "test1", Password: "test1"},
-			want:  "test1",
-		},
-	}
+	t.Run("ウォレットが作成されているべき", func(t *testing.T) {
+		if err != nil {
+			t.Error(err)
+		}
 
-	//out := &output.LoginUser{
-	//	User: &output.LoginU{
-	//		ID:        user.Id().Value(),
-	//		Name:      user.Name(),
-	//		CreatedAt: user.CreatedAt().Value(),
-	//		UpdatedAt: user.UpdatedAt().Value(),
-	//	},
-	//
-	//	Wallet: &output.LoginUserWallet{
-	//		ID:        user.Wallet().Id().Value(),
-	//		UserID:    user.Wallet().UserID().Value(),
-	//		Address:   user.Wallet().BlockchainAddress(),
-	//		CreatedAt: user.Wallet().CreatedAt().Value(),
-	//		UpdatedAt: user.UpdatedAt().Value(),
-	//	},
-	//
-	//	CryptKey: &output.LoginUserCryptKey{
-	//		PrivateKey: key.PrivateKeyValue(),
-	//		PublicKey:  key.PublicKeyValue(),
-	//	},
-	//}, nil
-	//
-	//
+		if out.User.ID != user1.Id().Value() {
+			t.Errorf("id is not match. result is , expected is ")
+		}
+	})
 
-	//usecase := &Loginusecase{
-	//	authRepository: database.NewAuthRepositoryImpl(),
-	//}
-	//
-	//out, err := usecase.Exec(&in)
-	//if err != nil {
-	//	t.NG(err)
-	//}
-	//
-
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-
-			out, _ := usecase.Exec(tt.input)
-			if !reflect.DeepEqual(out, tt.want) {
-				t.Errorf("Exec() got = %v, want %v", out, tt.want)
-			}
-
-			//got, err := usecase.Exec(tt.args.in)
-			//if (err != nil) != tt.wantErr {
-			//	t.Errorf("Exec() error = %v, wantErr %v", err, tt.wantErr)
-			//	return
-			//}
-			//if !reflect.DeepEqual(got, tt.want) {
-			//	t.Errorf("Exec() got = %v, want %v", got, tt.want)
-			//}
-		})
-	}
 }
