@@ -1,4 +1,4 @@
-.PHONY: version ps desc build up down build_up in deploy start test
+.PHONY: version ps desc build up down build_up in deploy start test mock
 
 APP_VERSION=${shell git rev-parse --short HEAD}
 
@@ -50,3 +50,8 @@ go_build:
 
 test:
 	go test -v -cover  ./src/usecase/... | grep -v -e "input" -e "output"
+
+mock:
+	mockgen -source=./src/usecase/authusecase/I_auth_repository.go -destination ./src/mock/auth_repository_mock.go
+
+
