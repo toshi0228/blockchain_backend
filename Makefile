@@ -52,6 +52,8 @@ test:
 	go test -v -cover  ./src/usecase/... | grep -v -e "input" -e "output"
 
 mock:
-	mockgen -source=./src/usecase/authusecase/I_auth_repository.go -destination ./src/mock/mock_authusecase/auth_repository_mock.go
+	go generate ./...
+
+
 
 
